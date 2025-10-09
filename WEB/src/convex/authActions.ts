@@ -165,9 +165,13 @@ export const startLoginWithOtp = action({
     if (!JWT_SECRET) throw new Error("JWT_SECRET is not set");
 
     const user = await ctx.runQuery(api.auth.getUserByEmail, { email });
+    console.log("User retrieved from DB:", user);
     if (!user) throw new Error("Invalid credentials");
 
+    console.log("Provided password:", password);
+    console.log("Stored hashed password:", user.password);
     const ok = await bcrypt.compare(password, user.password);
+    console.log("Password match result:", ok);
     if (!ok) throw new Error("Invalid credentials");
 
     // Generate a 6-digit OTP

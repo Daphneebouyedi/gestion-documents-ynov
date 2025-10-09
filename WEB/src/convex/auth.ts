@@ -21,13 +21,16 @@ export const getUserByEmail = query({
     email: v.string(),
   },
   handler: async (ctx, { email }) => {
-    return await ctx.db
+    console.log("getUserByEmail - received email:", email);
+    const normalizedEmail = email.toLowerCase();
+    const user = await ctx.db
       .query("users")
-      .filter((q) => q.eq(q.field("email"), email))
+      .withIndex("by_email", (q) => q.eq("email", normalizedEmail))
       .unique();
+    console.log("getUserByEmail - found user:", user);
+    return user;
   },
 });
-
 export const updateUser = mutation({
   args: {
     userId: v.id("users"),
