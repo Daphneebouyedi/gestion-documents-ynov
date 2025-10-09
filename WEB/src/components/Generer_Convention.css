@@ -1,0 +1,134 @@
+:root {
+  --primary-color: #4ECDC4;
+  --secondary-color: #2d3748;
+  --light-gray: #f7fafc;
+  --medium-gray: #e2e8f0;
+  --dark-gray: #a0aec0;
+  --white: #ffffff;
+  --error-color: #e53e3e;
+}
+
+.convention-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.convention-header {
+  position: relative; /* Make this a positioning context */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--medium-gray);
+  padding-bottom: 1rem;
+  padding-left: 100px; /* Add padding to prevent overlap with the button */
+  padding-right: 100px; /* Balance the padding */
+}
+
+.logo-ynov {
+  width: 120px;
+  margin-right: 1.5rem;
+}
+
+.convention-header h1 {
+  color: var(--secondary-color);
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.convention-form fieldset {
+  border: 1px solid var(--dark-gray);
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.convention-form legend {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  padding: 0 0.5rem;
+  margin-left: 1rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.form-grid-single {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.convention-form label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--secondary-color);
+}
+
+.convention-form input[type="text"],
+.convention-form input[type="email"],
+.convention-form input[type="tel"],
+.convention-form input[type="url"],
+.convention-form input[type="date"],
+.convention-form input[type="number"],
+.convention-form select,
+.convention-form textarea {
+  padding: 8px;
+  border: 1px solid var(--dark-gray);
+  border-radius: 4px;
+  font-size: 1rem;
+  color: var(--secondary-color);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.convention-form input:focus,
+.convention-form select:focus,
+.convention-form textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.3);
+}
+
+.convention-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-actions {
+  text-align: right;
+  margin-top: 2rem;
+}
+
+.submit-button, .cancel{
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #3db8ae;
+}

@@ -1,0 +1,202 @@
+.alerts-main-content {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.alerts-filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.alerts-filters-container h3 {
+  margin: 0;
+  font-size: 1.2em;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.alerts-filters {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.alerts-filters select {
+  flex: 1; /* Allow selects to grow */
+  min-width: 150px; /* Minimum width for selects */
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #fff; /* Changed to white for card-like */
+  font-size: 0.95em;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Added shadow for card-like */
+}
+
+.alerts-filters select:hover {
+  border-color: var(--primary-color); /* Hover effect */
+  box-shadow: 0 4px 8px rgba(35, 194, 162, 0.1); /* Enhanced shadow on hover */
+}
+
+.alerts-filters select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(35, 194, 162, 0.4); /* Stronger focus shadow */
+}
+
+/* New styles for action status buttons */
+.action-status-button {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75em;
+  font-weight: 600;
+  text-transform: capitalize;
+  border: none; /* Make it look like a button */
+  cursor: pointer; /* Indicate it's clickable */
+  transition: all 0.2s ease;
+}
+
+.action-status-button.status-relance {
+  background-color: #28a745; /* Green for 'relancé' */
+  color: #fff;
+}
+
+.action-status-button.status-attente {
+  background-color: #dc3545; /* Red for 'en attente' */
+  color: #fff;
+}
+
+.action-status-button:hover {
+  opacity: 0.8; /* Subtle hover effect */
+}
+
+.alerts-table-container {
+  overflow-x: auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.alerts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.alerts-table th,
+.alerts-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 0.9em;
+  color: #495057;
+}
+
+.alerts-table th {
+  background-color: #f1f3f5;
+  font-weight: 600;
+  color: #343a40;
+}
+
+.alerts-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.alert-profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+.alert-status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8em;
+  font-weight: 600;
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.alert-status-badge.red {
+  background-color: #dc3545; /* Bootstrap danger */
+}
+
+.alert-status-badge.orange {
+  background-color: #fd7e14; /* Bootstrap warning */
+}
+
+.alert-status-badge.blue {
+  background-color: #007bff; /* Bootstrap primary */
+}
+
+/* Actions Menu */
+.actions-cell {
+  position: relative;
+  width: 50px; /* Give some space for the button */
+}
+
+.three-dots-button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.three-dots-button:hover {
+  background-color: #f1f1f1;
+}
+
+.action-menu-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.action-menu {
+  position: absolute;
+  top: 100%; /* Position below the button */
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 180px;
+  z-index: 20; /* Ensure it's above other content */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* For border-radius on children */
+}
+
+.action-menu button {
+  background: none;
+  border: none;
+  padding: 10px 15px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: #333;
+  transition: background-color 0.2s ease, color 0.2s ease; /* Added color transition */
+  width: 100%;
+}
+
+.action-menu button:hover {
+  background-color: #f8f9fa;
+  color: var(--primary-color);
+}

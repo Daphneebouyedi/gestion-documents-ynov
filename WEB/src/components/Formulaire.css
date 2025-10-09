@@ -1,0 +1,273 @@
+:root {
+  --primary-green: #4ECDC4;
+  --text-dark: #2d3748;
+  --text-light: #718096;
+  --input-border: #e2e8f0;
+  --background-light: #f7fafc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.create-account-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',sans-serif;
+  text-align: center;
+}
+
+.logo-image {
+  width: 150px;      /* largeur de l'image */
+  height: auto;      /* conserve les proportions */
+  display: block;
+  margin: 0 auto 20px auto; /* centre et ajoute un espace sous l'image */
+}
+
+/* Left Column - Teal Section */
+.left-column {
+  background-color: var(--primary-green);
+  width: 38vw;
+  min-width: 230px;
+  max-width: 450px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.connect-button {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 0.65rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  min-width: 120px;
+  margin-top: 20rem;
+}
+
+.connect-button:hover {
+  background-color: white;
+  color: var(--primary-green);
+}
+
+/* Right Column - Form Section */
+.right-column {
+  flex: 1;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 440px;
+}
+
+.form-title {
+  color: var(--primary-green);
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: .8rem;
+  text-align: left;
+}
+
+.form-subtitle {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.form-group.half {
+  flex: 1 1 0;
+}
+
+.form-group label {
+  color: var(--text-dark);
+  font-size: 0.93rem;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+
+.form-input {
+  padding: 0.7rem;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  font-size: 0.96rem;
+  transition: border-color 0.3s ease;
+  background-color: white; /* fond blanc */
+  font-family: inherit;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.12);
+}
+
+.form-input {
+  background-color: #ffffff !important; /* fond blanc forcé */
+  color: #000000 !important; /* texte en noir forcé */
+}
+
+.form-input::placeholder {
+  color: #888888 !important; /* gris lisible pour placeholder */
+}
+
+/* Paragraphe dynamique pour mot de passe */
+.password-info {
+  font-size: 0.84rem;
+  color: var(--text-light);
+  line-height: 1.5;
+  margin-top: 0.3rem;
+}
+
+.password-info span {
+  color: var(--text-light); /* couleur par défaut */
+  transition: color 0.3s ease;
+}
+
+.password-info span.valid {
+  color: var(--primary-green); /* couleur quand le critère est rempli */
+}
+
+.password-info-below {
+  margin-top: 0.5rem;
+  margin-bottom: 0.2rem;
+  text-align: left;
+  grid-column: 1 / -1;
+  display: block;
+}
+
+/* Le bouton */
+.validate-button {
+  background-color: var(--primary-green);
+  color: white;
+  border: none;
+  padding: 0.82rem 2.2rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: center;
+  margin-top: 1.2rem;
+  min-width: 110px;
+  font-weight: 500;
+}
+
+.validate-button:hover {
+  background-color: #45b7b8;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .left-column {
+    width: 33vw;
+    max-width: 350px;
+    padding: 2rem 1rem;
+  }
+  .form-container {
+    max-width: 95vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .create-account-container {
+    flex-direction: column;
+  }
+  .left-column {
+    width: 100%;
+    max-width: 100vw;
+    min-height: 130px;
+    padding: 1.3rem 0.7rem 0.5rem 0.7rem;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .right-column {
+    width: 100%;
+    padding: 1.5rem 0.5rem;
+  }
+  .form-container {
+    max-width: 100%;
+  }
+  .logo-section {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  .logo-text {
+    font-size: 2rem;
+  }
+  .logo-subtitle {
+    font-size: 1rem;
+  }
+  .connect-button {
+    margin-bottom: 0;
+    align-self: flex-end;
+  }
+  .form-title {
+    font-size: 1.15rem;
+  }
+  .form-row {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .left-column,
+  .right-column {
+    padding: 1.1rem 0.3rem;
+  }
+  .form-title {
+    font-size: 1rem;
+  }
+  .form-subtitle {
+    font-size: 0.88rem;
+    margin-bottom: 0.7rem;
+  }
+  .account-form {
+    gap: 0.7rem;
+  }
+  .form-row {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .validate-button,
+  .connect-button {
+    width: 100%;
+    min-width: unset;
+    font-size: 0.98rem;
+  }
+  .password-info-below {
+    margin-top: 0.2rem;
+    margin-bottom: 0.1rem;
+    font-size: 0.8rem;
+    text-align: left;
+  }
+}

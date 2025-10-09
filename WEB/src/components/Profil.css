@@ -1,0 +1,452 @@
+body, .gestion-container {
+  background: #f6f8fa !important;
+}
+
+.main-content {
+  /* Suppression des contraintes de largeur/padding spécifiques pour ne pas impacter les autres pages */
+}
+
+.profile-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px 0 rgba(30,41,59,0.08);
+  padding: 32px 28px 28px 28px;
+  margin-bottom: 32px;
+  border: 1px solid #e2e8f0;
+}
+
+.profile-section-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #22223b;
+}
+.profile-section-desc {
+  color: #6c757d;
+  font-size: 1rem;
+  margin-bottom: 24px;
+}
+
+.profile-form label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #22223b;
+  display: block;
+}
+.profile-form input {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: 7px 10px;
+  border-radius: 7px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 12px;
+  font-size: 0.97rem;
+  background: #f8fafc;
+  transition: border 0.2s;
+  box-sizing: border-box;
+}
+.profile-form input:focus {
+  border: 1.5px solid #4ECDC4;
+  outline: none;
+}
+.save-button {
+  background: linear-gradient(90deg, #ffe082 0%, #ffd54f 100%);
+  color: #222;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(30,41,59,0.06);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.save-button:hover {
+  background: linear-gradient(90deg, #ffd54f 0%, #ffe082 100%);
+  box-shadow: 0 4px 16px rgba(30,41,59,0.10);
+}
+.profile-subtitle {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-bottom: 32px;
+}
+
+
+/* Container global */
+.gestion-container {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.logo-image {
+  width: 150px;
+  height: auto;
+  display: block;
+  margin: 0 auto 20px auto;
+}
+
+/* Navigation */
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nav-button:hover {
+  background-color: #34495e;
+}
+
+.nav-button.active {
+  background-color: #ffffff;
+  color: #34495e;
+}
+
+.nav-button.logout {
+  margin-top: auto;
+  background-color: #e74c3c;
+}
+
+.nav-button.logout:hover {
+  background-color: #c0392b;
+}
+
+/* Menus déroulants */
+.floating-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #34495e;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 198px;
+  z-index: 10;
+}
+
+.floating-menu-item {
+  padding: 10px 15px;
+  text-align: left;
+  font-size: 14px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.floating-menu-item:hover {
+  background-color: #4ECDC4;
+}
+
+/* Profil Section */
+.profile-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile-avatar img {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+}
+
+.profile-details h2 {
+  margin: 0;
+}
+
+.profile-details p {
+  margin: 2px 0;
+  color: #666;
+}
+
+/* Bouton Modifier */
+.edit-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background: #4ECDC4;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.edit-button:hover {
+  background: #4ECDC4;
+}
+
+/* Statistiques style admin (cartes) */
+.statistics-admin {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.stat-card {
+  flex: 1 1 150px;
+  background: #4a90e2;
+  padding: 15px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.stat-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.stat-card p {
+  margin: 0;
+  color:white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.stat-card.processed {
+  background: #1b964e;
+  color: white;
+}
+
+.stat-card.rejected {
+  color: white;
+  background: #ff0000;
+  color: white;
+}
+
+.stat-card.pending {
+  background: #f1c40f;
+  color: white;
+}
+
+
+.tracabilite-container {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.welcome-title-dashboard {
+    color: #003366;
+    font-size: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.search-container {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end; /* Alignement à droite */
+}
+
+.search-input {
+    padding: 10px 15px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    border-color: #4ECDC4;
+    outline: none;
+}
+
+.logs-table-wrapper {
+    overflow-x: auto; /* Permet le défilement horizontal si le tableau est trop large */
+}
+
+.logs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+}
+
+.logs-table th, .logs-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+/* En-tête du tableau */
+.logs-table thead th {
+    background-color: #003366; /* Fond bleu Ynov */
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Corps du tableau */
+.logs-table tbody tr:hover {
+    background-color: #f0f8ff; /* Léger survol pour l'interactivité */
+}
+
+/* Style spécifique pour les actions (pour les distinguer) */
+.logs-table td:nth-child(3) {
+    font-weight: bold;
+}
+.logs-table td:nth-child(3):contains('Ajout') {
+    color: #2ecc71; /* Vert */
+}
+.logs-table td:nth-child(3):contains('Modification') {
+    color: #f39c12; /* Orange */
+}
+.logs-table td:nth-child(3):contains('Suppression') {
+    color: #e74c3c; /* Rouge */
+}
+
+.no-results {
+    text-align: center;
+    color: #999;
+    padding: 20px 0 !important;
+}
+
+.statistics-admin {
+    display: grid;
+    /* La grille principale est basée sur 4 colonnes pour gérer les 4 Documents */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.stat-card {
+    /* Style de base inchangé */
+    background: #4ECDC4;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+    color: white; /* Assurer que le texte est blanc */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    /* Chaque carte prend la place d'une colonne par défaut (1/4 de la largeur) */
+    grid-column: span 1; 
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.stat-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #ffffff;
+    text-transform: capitalize; /* Affichage plus propre */
+}
+
+.stat-card p {
+    margin: 0;
+    color:white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Couleurs spécifiques (adaptées à l'image fournie) */
+.stat-card.processed {
+    background: #27ae60; /* Vert foncé */
+}
+
+.stat-card.rejected {
+    background: #e74c3c; /* Rouge */
+}
+
+.stat-card.pending {
+    background: #f1c40f; /* Jaune/Orange */
+    color: #333; /* Texte sombre pour la lisibilité sur fond jaune */
+}
+.stat-card.pending p, .stat-card.pending h3 {
+    color: #ffffff;
+}
+
+/* La 6ème carte (processed Requests) */
+.stat-card:nth-child(6) {
+    grid-column: span 1; 
+}
+
+/* La 7ème carte (pending Requests) */
+.stat-card:nth-child(7) {
+    grid-column: span 1; 
+}
+
+
+/* ------------------------------------------------------------------- */
+/* MEDIA QUERIES (Adaptabilité à la taille de l'écran) */
+/* ------------------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+    /* Sur les écrans moyens, la grille passe à 2 colonnes max */
+    .statistics-admin {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Chaque carte, y compris les requêtes, prend maintenant 1 ou 2 colonnes dans cette nouvelle grille 2xN */
+    .stat-card {
+        grid-column: span 1 !important; /* Force toutes les cartes à prendre la moitié de l'écran */
+    }
+
+    /* Pour les requêtes (ligne 2 dans l'image), nous allons les forcer à prendre deux colonnes 
+       pour qu'elles restent plus larges que les autres (si on veut conserver la largeur de l'image) */
+    .stat-card:nth-child(5), 
+    .stat-card:nth-child(6), 
+    .stat-card:nth-child(7) {
+        grid-column: span 2 !important; /* Les requêtes occupent toute la largeur (car 2 colonnes) */
+    }
+}
+
+
+@media (max-width: 768px) {
+    /* Sur tablette/mobile, toutes les cartes doivent être pleines largeur et s'empiler */
+    .statistics-admin {
+        grid-template-columns: 1fr; /* Une seule colonne */
+        gap: 10px;
+    }
+    
+    /* Toutes les cartes prennent toute la colonne (span 1 = 100% de la largeur) */
+    .stat-card,
+    .stat-card:nth-child(5), 
+    .stat-card:nth-child(6), 
+    .stat-card:nth-child(7) {
+        grid-column: span 1 !important;
+    }
+}
