@@ -27,23 +27,22 @@ const AttestationForm = () => {
   const navigate = useNavigate();
   const requestAttestation = useMutation(api.attestations.requestAttestation);
 
-  // États pour les champs du formulaire (avec des valeurs de test)
   const [formData, setFormData] = useState({
     // Infos Étudiant
-    nom: "EL FAHSI",
-    prenom: "Sara",
-    dateNaissance: "2000-01-01",
+    nom: "",
+    prenom: "",
+    dateNaissance: "",
     // Infos Formation
-    promotion: "B3",
-    specialite: "Développement",
-    anneeScolaire: "2025-2026",
+    promotion: "",
+    specialite: "",
+    anneeScolaire: "",
 
     // Infos Paiement
-    modalitePaiement: "Semestrielle",
-    fraisPreinscription: "5000",
-    fraisScolarite: "75000",
-    totalPaye: "80000",
-    modePaiement: "Virement",
+    modalitePaiement: "",
+    fraisPreinscription: "",
+    fraisScolarite: "",
+    totalPaye: "",
+    modePaiement: "",
     date: new Date().toISOString().substring(0, 10),
   });
 
@@ -303,19 +302,15 @@ const AttestationForm = () => {
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout pageTitle="Générer une attestation de frais de scolarité" pageDescription="">
       <div className="content-wrapper">
-        <div className="convention-header">
-          <img src={Ynov} alt="Ynov Campus" className="logo-ynov" />
-          <h1>Générer une attestation <br />de frais de scolarité</h1>
-        </div>
 
         <form className="attestation-form" onSubmit={handleSubmit}>
           {/* ... (votre JSX de formulaire inchangé) ... */}
           <fieldset>
             <legend>Informations de l'Étudiant</legend>
-            <div className="form-grid-attestation">
-              <div className="form-group">
+            <div className="ce-grid">
+              <div className="ce-form-group">
                 <label>Nom :</label>
                 <input
                   type="text"
@@ -325,7 +320,7 @@ const AttestationForm = () => {
                   required
                 />
               </div>
-              <div className="form-group">
+              <div className="ce-form-group">
                 <label>Prénom :</label>
                 <input
                   type="text"
@@ -335,7 +330,7 @@ const AttestationForm = () => {
                   required
                 />
               </div>
-              <div className="form-group">
+              <div className="ce-form-group">
                 <label>Date de naissance :</label>
                 <input
                   type="date"
@@ -350,8 +345,8 @@ const AttestationForm = () => {
 
           <fieldset>
             <legend>Informations de la Formation</legend>
-            <div className="form-grid">
-              <div className="form-group">
+            <div className="ce-grid">
+              <div className="ce-form-group">
                 <label>Promotion :</label>
                 <select
                   name="promotion"
@@ -367,7 +362,7 @@ const AttestationForm = () => {
                   <option value="M2">Mastère 2</option>
                 </select>
               </div>
-              <div className="form-group">
+              <div className="ce-form-group">
                 <label>Spécialité :</label>
                 <select
                   name="specialite"
@@ -382,7 +377,7 @@ const AttestationForm = () => {
                   <option value="Informatique">Informatique</option>
                 </select>
               </div>
-              <div className="form-group">
+              <div className="ce-form-group">
                 <label>Année scolaire :</label>
                 <input
                   type="text"

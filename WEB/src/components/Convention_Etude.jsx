@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Convention_Etude.css";
 import Ynov from '../img/Ynov.png';
@@ -13,37 +13,32 @@ const ConventionEtudeForm = () => {
   const createConvention = useMutation(api.conventions.createConvention);
   const generateUploadUrl = useMutation(api.documents.generateUploadUrl);
 
-  // Les données d'exemple ont été rétablies pour assurer que le PDF ait du contenu visible
   const [formData, setFormData] = useState({
     // État civil du candidat
-    civiliteCandidat: "Mme",
-    nomCandidat: "DUPONT",
-    prenomCandidat: "Sophie",
-    dateNaissanceCandidat: "2005-08-20",
-    lieuNaissanceCandidat: "Marseille",
-    paysCandidat: "France",
-    nationaliteCandidat: "Française",
-    adresseCandidat: "5 Allée des Palmiers",
-    villeCandidat: "Nice",
-    codePostalCandidat: "06000",
-    telephoneCandidat: "0493000000",
-    portableCandidat: "0600000000",
-    emailCandidat: "sophie.dupont@mail.com",
-    idCandidat: "ID12345678",
+    civiliteCandidat: "",
+    nomCandidat: "",
+    prenomCandidat: "",
+    dateNaissanceCandidat: "",
+    lieuNaissanceCandidat: "",
+    paysCandidat: "",
+    nationaliteCandidat: "",
+    adresseCandidat: "",
+    villeCandidat: "",
+    codePostalCandidat: "",
+    telephoneCandidat: "",
+    portableCandidat: "",
+    emailCandidat: "",
+    idCandidat: "",
     photoCandidat: null,
 
-    // Responsables (simulé pour l'exemple)
-    civiliteRespLegal: "Mr", qualiteRespLegal: "Père", nomRespLegal: "DUPONT", prenomRespLegal: "Marc", dateNaissanceRespLegal: "1975-01-01", lieuNaissanceRespLegal: "Paris", paysRespLegal: "France", nationaliteRespLegal: "Française", adresseRespLegal: "5 Allée des Palmiers", villeRespLegal: "Nice", codePostalRespLegal: "06000", telephoneRespLegal: "0493111111", portableRespLegal: "0611111111", emailRespLegal: "marc.dupont@mail.com", idRespLegal: "ID87654321",
+    // Responsables
+    civiliteRespLegal: "", qualiteRespLegal: "", nomRespLegal: "", prenomRespLegal: "", dateNaissanceRespLegal: "", lieuNaissanceRespLegal: "", paysRespLegal: "", nationaliteRespLegal: "", adresseRespLegal: "", villeRespLegal: "", codePostalRespLegal: "", telephoneRespLegal: "", portableRespLegal: "", emailRespLegal: "", idRespLegal: "",
 
-    civiliteRespFin: "Mr", qualiteRespFin: "Père", nomRespFin: "DUPONT", prenomRespFin: "Marc", dateNaissanceRespFin: "1975-01-01", lieuNaissanceRespFin: "Paris", paysRespFin: "France", nationaliteRespFin: "Française", adresseRespFin: "5 Allée des Palmiers", villeRespFin: "Nice", codePostalRespFin: "06000", telephoneRespFin: "0493111111", emailRespFin: "marc.dupont@mail.com", idRespFin: "ID87654321",
+    civiliteRespFin: "", qualiteRespFin: "", nomRespFin: "", prenomRespFin: "", dateNaissanceRespFin: "", lieuNaissanceRespFin: "", paysRespFin: "", nationaliteRespFin: "", adresseRespFin: "", villeRespFin: "", codePostalRespFin: "", telephoneRespFin: "", emailRespFin: "", idRespFin: "",
     
-    // Études antérieures (données d'exemple)
-    etudes: [
-      { annee: "2023-2024", etudeSuivie: "Terminales", etablissement: "Lycée Fénelon", diplome: "Baccalauréat", dateObtention: "2024-07-05" },
-      { annee: "2022-2023", etudeSuivie: "Première", etablissement: "Lycée Fénelon", diplome: "N/A", dateObtention: "2023-07-05" },
-      { annee: "2021-2022", etudeSuivie: "Seconde", etablissement: "Lycée Fénelon", diplome: "N/A", dateObtention: "2022-07-05" },
-    ],
-    commentaire: "Année de césure en 2020-2021 pour un voyage humanitaire au Pérou.",
+    // Études antérieures
+    etudes: [],
+    commentaire: "",
   });
 
   const handleChange = (e) => {
@@ -136,68 +131,70 @@ const ConventionEtudeForm = () => {
   // FONCTION DE GÉNÉRATION DU PDF
   // --------------------------------------------------------------------------------
   const generatePdf = () => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const margin = 15;
-    let yPos = 15;
-    const ynovBlue = [0, 51, 102]; // Bleu Ynov foncé
-    const grayDark = [50, 50, 50];
+    return new Promise((resolve) => {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 15;
+      let yPos = 15;
+      const ynovBlue = [0, 51, 102]; // Bleu Ynov foncé
+      const grayDark = [50, 50, 50];
 
-    // --- LOGO YNOV ---
-    const ynovLogoWidth = 20;
-    const ynovLogoHeight = 18;
-    try {
-        doc.addImage(Ynov, "PNG", margin, yPos, ynovLogoWidth, ynovLogoHeight);
-    } catch (e) {
-        // En cas d'échec de chargement d'image (fréquent en environnement de dev), on continue
-        console.warn("Erreur de chargement d'image Ynov. Poursuite sans logo.");
-    }
-    
-    // --- TITRE PRINCIPAL ---
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.setTextColor(ynovBlue[0], ynovBlue[1], ynovBlue[2]);
-    doc.text("CONVENTION D'ÉTUDE", pageWidth / 2, yPos + 12, { align: "center" });
+      // --- LOGO YNOV ---
+      const ynovLogoWidth = 20;
+      const ynovLogoHeight = 18;
+      try {
+          doc.addImage(Ynov, "PNG", margin, yPos, ynovLogoWidth, ynovLogoHeight);
+      } catch (e) {
+          // En cas d'échec de chargement d'image (fréquent en environnement de dev), on continue
+          console.warn("Erreur de chargement d'image Ynov. Poursuite sans logo.");
+      }
 
-    // --- LIGNE DE SÉPARATION ---
-    doc.setDrawColor(ynovBlue[0], ynovBlue[1], ynovBlue[2]);
-    doc.setLineWidth(1);
-    doc.line(margin, yPos + 18, pageWidth - margin, yPos + 18);
-    yPos = yPos + 25;
+      // --- TITRE PRINCIPAL ---
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(22);
+      doc.setTextColor(ynovBlue[0], ynovBlue[1], ynovBlue[2]);
+      doc.text("CONVENTION D'ÉTUDE", pageWidth / 2, yPos + 12, { align: "center" });
 
-    // --- CADRE PHOTO CANDIDAT (Haut-Droit) ---
-    const photoX = pageWidth - margin - 35;
-    const photoY = 15;
-    const photoW = 30;
-    const photoH = 40;
-    doc.setDrawColor(ynovBlue[0], ynovBlue[1], ynovBlue[2]);
-    doc.setLineWidth(1);
-    doc.line(margin, yPos + 18, pageWidth - margin, yPos + 18);
-    yPos = yPos + 25;
-    doc.rect(photoX, photoY, photoW, photoH);
-    doc.setFontSize(8);
-    doc.setTextColor(grayDark[0], grayDark[1], grayDark[2]);
-    doc.text("Photo d'identité", photoX + photoW / 2, photoY + photoH / 2, { align: "center" });
+      // --- LIGNE DE SÉPARATION ---
+      doc.setDrawColor(ynovBlue[0], ynovBlue[1], ynovBlue[2]);
+      doc.setLineWidth(1);
+      doc.line(margin, yPos + 18, pageWidth - margin, yPos + 18);
+      yPos = yPos + 25;
 
-    // Gestion de la photo asynchrone pour ne pas bloquer le reste
-    if (formData.photoCandidat) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const imgData = e.target.result;
-            doc.addImage(imgData, "JPEG", photoX, photoY, photoW, photoH);
-            // On finit le PDF après le chargement de l'image
-            finishPdf(doc, yPos, margin, pageWidth, pageHeight, grayDark, ynovBlue);
-        };
-        reader.readAsDataURL(formData.photoCandidat);
-    } else {
-        // On finit le PDF immédiatement si pas de photo
-        finishPdf(doc, yPos, margin, pageWidth, pageHeight, grayDark, ynovBlue);
-    }
+      // --- CADRE PHOTO CANDIDAT (Haut-Droit) ---
+      const photoX = pageWidth - margin - 35;
+      const photoY = 15;
+      const photoW = 30;
+      const photoH = 40;
+      doc.setDrawColor(ynovBlue[0], ynovBlue[1], ynovBlue[2]);
+      doc.setLineWidth(1);
+      doc.line(margin, yPos + 18, pageWidth - margin, yPos + 18);
+      yPos = yPos + 25;
+      doc.rect(photoX, photoY, photoW, photoH);
+      doc.setFontSize(8);
+      doc.setTextColor(grayDark[0], grayDark[1], grayDark[2]);
+      doc.text("Photo d'identité", photoX + photoW / 2, photoY + photoH / 2, { align: "center" });
+
+      // Gestion de la photo asynchrone pour ne pas bloquer le reste
+      if (formData.photoCandidat) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+              const imgData = e.target.result;
+              doc.addImage(imgData, "JPEG", photoX, photoY, photoW, photoH);
+              // On finit le PDF après le chargement de l'image
+              finishPdf(doc, yPos, margin, pageWidth, pageHeight, grayDark, ynovBlue, resolve);
+          };
+          reader.readAsDataURL(formData.photoCandidat);
+      } else {
+          // On finit le PDF immédiatement si pas de photo
+          finishPdf(doc, yPos, margin, pageWidth, pageHeight, grayDark, ynovBlue, resolve);
+      }
+    });
   };
 
   // --- Fonction séparée pour finir le PDF (avec un design pro et structuré) ---
-  const finishPdf = (doc, yPos, margin, pageWidth, pageHeight, grayDark, ynovBlue) => {
+  const finishPdf = (doc, yPos, margin, pageWidth, pageHeight, grayDark, ynovBlue, resolve) => {
     
     const contentWidth = pageWidth - 2 * margin;
 
@@ -444,18 +441,15 @@ const ConventionEtudeForm = () => {
 
     // --- Sauvegarde ---
     doc.save(`Convention-${formData.nomCandidat}-${formData.prenomCandidat}.pdf`);
+    resolve();
   };
   // --------------------------------------------------------------------------------
 
   // Reste du code du composant React (non modifié)
   return (
-    <DashboardLayout>
+    <DashboardLayout pageTitle="Générer une convention d'étude" pageDescription="">
       <div className="ce-main-container">
         <div className="ce-content-wrapper">
-          <div className="convention-header">
-            <img src={Ynov} alt="Ynov Campus" className="logo-ynov" />
-            <h1 className="ce-title">Générer une convention d'étude</h1>
-          </div>
           <form onSubmit={handleSubmit} className="ce-form">
             {/* ---------------- État civil du candidat ---------------- */}
           <fieldset className="ce-fieldset">

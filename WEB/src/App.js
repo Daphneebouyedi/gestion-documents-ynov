@@ -21,7 +21,7 @@ import AttestationForm from "./components/Attestation";
 import DemandesMails from "./components/Demandes-Mails";
 import Generer from "./components/Generer_Convention";
 import GestionUtilisateurs from "./components/Gestion-Utilisateurs";
-import InfoUtilisateurs from "./components/Info-Utilisateurs";
+import DetailsUtilisateurs from "./components/Details_utilisateurs";
 import Profil from "./components/Profil"
 import ConventionEtudeForm from "./components/Convention_Etude"
 import DocumentsGeneres from "./components/Documents_Generes";
@@ -29,6 +29,7 @@ import DocumentGeneresDetailPage from "./components/DetailDocGeneres";
 import DocumentDetail from "./components/DocumentDetail";
 import TermsContent from "./components/TermsContent"; // Import TermsContent
 import HomePage from "./components/HomePage";
+import DetailsDemandes from "./components/Details_demandes";
 
 const convex = new ConvexReactClient(process.env.REACT_APP_CONVEX_URL, {
   auth: {
@@ -61,6 +62,7 @@ function App() {
           <Route path="/demandes/:id" element={<DemandesMails />} />
           <Route path="/demandes-mail/:id" element={<DemandesMails />} />
           <Route path="/reponse-mail/:id" element={<ReponseMail />} />
+          <Route path="/details-demandes/:id" element={<DetailsDemandes />} />
 
           {/* Documents */}
           <Route path="/documents-dispo" element={<DocumentsDispo />} />
@@ -79,7 +81,7 @@ function App() {
 
           {/* Profil */}
           <Route path="/profil" element={<Profil/>} />
-          <Route path="/utilisateur/:id" element={<InfoUtilisateurs />} />
+          <Route path="/utilisateur/:id" element={<DetailsUtilisateurs />} />
           <Route path="/gestion-utilisateurs" element={<GestionUtilisateurs />} />  
 
           {/* Conditions générales */}

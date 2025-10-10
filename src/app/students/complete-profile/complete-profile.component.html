@@ -1,0 +1,24 @@
+<div class="profile-bg">
+  <div class="profile-container">
+    <h2>Compléter mon profil</h2>
+    <form (ngSubmit)="onSubmit()" #profileForm="ngForm">
+      <!-- id et email sont récupérés côté TS, pas modifiables ici -->
+      <div class="input-group">
+        <input type="text" placeholder="Téléphone" required [(ngModel)]="profile.telephone" name="telephone">
+      </div>
+      <div class="input-group">
+        <input type="text" placeholder="Adresse" required [(ngModel)]="profile.adresse" name="adresse">
+      </div>
+      <div class="input-group">
+        <input type="text" placeholder="Pays" required [(ngModel)]="profile.pays" name="pays">
+      </div>
+      <div class="input-group">
+        <input type="text" placeholder="Ville" required [(ngModel)]="profile.ville" name="ville">
+      </div>
+      <div class="input-group">
+        <input type="file" accept="image/*" (change)="onFileSelected($event)">
+      </div>
+      <button type="submit" class="profile-btn" [disabled]="!profileForm.form.valid">Valider</button>
+    </form>
+  </div>
+</div>

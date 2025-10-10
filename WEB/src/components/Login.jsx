@@ -6,6 +6,7 @@ import Ynov from '../img/Ynov.png';
 import './Login.css';
 import ReCAPTCHA from 'react-google-recaptcha';
 
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -22,6 +23,7 @@ const Login = () => {
   const [showPwHelp, setShowPwHelp] = useState(false);
   const [pwTouched, setPwTouched] = useState(false);
   const [recaptchaValue, setRecaptchaValue] = useState(null);
+
 
   // Initialize Convex login mutation only
   const startLoginWithOtp = useAction(api.authActions.startLoginWithOtp);
@@ -245,10 +247,12 @@ const Login = () => {
               {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
 
               {step === 'credentials' && (
-                <ReCAPTCHA
-                  sitekey="6Le-9NorAAAAAOQLM5EudqzLqAJqJEa_-ZJCtX0F"
-                  onChange={(value) => setRecaptchaValue(value)}
-                />
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <ReCAPTCHA
+                    sitekey="6Le-9NorAAAAAOQLM5EudqzLqAJqJEa_-ZJCtX0F"
+                    onChange={(value) => setRecaptchaValue(value)}
+                  />
+                </div>
               )}
 
               <button type="submit" className="continue-button" disabled={loading}>

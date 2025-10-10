@@ -1,5 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { Id } from "./_generated/dataModel";
 
 export const requestAttestation = mutation({
   args: {
@@ -10,21 +11,36 @@ export const requestAttestation = mutation({
     specialite: v.string(),
     anneeScolaire: v.string(),
     modalitePaiement: v.string(),
-    fraisPreinscription: v.number(), // Changed to v.number()
-    fraisScolarite: v.number(),     // Changed to v.number()
-    totalPaye: v.number(),          // Changed to v.number()
+    fraisPreinscription: v.number(),
+    fraisScolarite: v.number(),
+    totalPaye: v.number(),
     modePaiement: v.string(),
     date: v.string(),
-    userId: v.optional(v.string()),
+    userId: v.optional(v.id("users")), // Made optional for admin generation
+    email: v.optional(v.string()), // Made optional
+    userName: v.optional(v.string()), // Made optional
+    requestType: v.optional(v.string()), // Made optional
+    status: v.optional(v.string()), // Made optional
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Non authentifié. Veuillez vous connecter pour demander une attestation.");
-    }
-
     const attestationId = await ctx.db.insert("attestations", {
-      ...args,
+      nom: args.nom,
+      prenom: args.prenom,
+      dateNaissance: args.dateNaissance,
+      promotion: args.promotion,
+      specialite: args.specialite,
+      anneeScolaire: args.anneeScolaire,
+      modalitePaiement: args.modalitePaiement,
+      fraisPreinscription: args.fraisPreinscription,
+      fraisScolarite: args.fraisScolarite,
+      totalPaye: args.totalPaye,
+      modePaiement: args.modePaiement,
+      date: args.date,
+      userId: args.userId,
+      email: args.email || "",
+      userName: args.userName || "",
+      requestType: args.requestType || "Admin Generated",
+      status: args.status || "Generated",
       createdAt: Date.now(),
     });
 
@@ -37,5 +53,12 @@ export const listAttestations = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db.query("attestations").collect();
+  },
+});
+
+export const getUserAttestations = query({
+  args: { userId: v.id("users") },
+  handler: async (ctx, { userId }) => {
+    return await ctx.db.query("attestations").filter(q => q.eq(q.field("userId"), userId)).collect();
   },
 });

@@ -13,12 +13,16 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as _internal from "../_internal.js";
+import type * as alerts from "../alerts.js";
 import type * as attestations from "../attestations.js";
 import type * as auth from "../auth.js";
 import type * as authActions from "../authActions.js";
 import type * as conventions from "../conventions.js";
+import type * as demandes from "../demandes.js";
 import type * as documents from "../documents.js";
 import type * as http from "../http.js";
+import type * as internal_ from "../internal.js";
 import type * as internal_auth from "../internal_auth.js";
 import type * as myFunctions from "../myFunctions.js";
 import type * as requests from "../requests.js";
@@ -33,12 +37,16 @@ import type * as user_actions from "../user_actions.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  _internal: typeof _internal;
+  alerts: typeof alerts;
   attestations: typeof attestations;
   auth: typeof auth;
   authActions: typeof authActions;
   conventions: typeof conventions;
+  demandes: typeof demandes;
   documents: typeof documents;
   http: typeof http;
+  internal: typeof internal_;
   internal_auth: typeof internal_auth;
   myFunctions: typeof myFunctions;
   requests: typeof requests;

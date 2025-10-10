@@ -1,55 +1,59 @@
-import React, { useState } from 'react';
+ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Generer_Convention.css';
 import Ynov from '../img/Ynov.png';
 import jsPDF from 'jspdf';
+import { useMutation } from "convex/react";
+import { api } from "../convex/_generated/api";
 import DashboardLayout from './DashboardLayout';
 
 
 const Generer = () => {
     const navigate = useNavigate();
+    const createConvention = useMutation(api.conventions.createConvention);
+
     const [formData, setFormData] = useState({
         // Période de stage
-        dateDebut: '2025-06-01', // Valeurs par défaut pour tester le PDF
-        dateFin: '2025-08-31',
+        dateDebut: '',
+        dateFin: '',
         // Stagiaire
-        stagiaireNom: 'MARTIN',
-        stagiairePrenom: 'Lucas',
-        stagiaireCivilite: 'Monsieur',
-        stagiaireAdresse: '12 Rue de la Paix',
-        stagiaireCodePostal: '75002',
-        stagiaireVille: 'Paris',
-        stagiaireTelephone: '0123456789',
-        stagiaireEmail: 'lucas.martin@mail.com',
+        stagiaireNom: '',
+        stagiairePrenom: '',
+        stagiaireCivilite: '',
+        stagiaireAdresse: '',
+        stagiaireCodePostal: '',
+        stagiaireVille: '',
+        stagiaireTelephone: '',
+        stagiaireEmail: '',
         // Entreprise
-        entrepriseType: 'SA',
-        entrepriseNom: 'Tech Innov',
-        entrepriseAdresse: '25 Avenue des Champs',
-        entrepriseCodePostal: '69007',
-        entrepriseVille: 'Lyon',
-        entreprisePays: 'France',
-        entrepriseTelephone: '0456789012',
-        entrepriseFax: '0456789013',
-        entrepriseSiteWeb: 'https://www.tech-innov.com',
-        entrepriseNbEmployes: '50',
+        entrepriseType: '',
+        entrepriseNom: '',
+        entrepriseAdresse: '',
+        entrepriseCodePostal: '',
+        entrepriseVille: '',
+        entreprisePays: '',
+        entrepriseTelephone: '',
+        entrepriseFax: '',
+        entrepriseSiteWeb: '',
+        entrepriseNbEmployes: '',
         // Représentant
-        representantNom: 'DUBOIS',
-        representantPrenom: 'Isabelle',
-        representantCivilite: 'Madame',
-        representantFonction: 'Directrice RH',
-        representantTelephone: '0678901234',
-        representantEmail: 'isabelle.dubois@tech-innov.com',
+        representantNom: '',
+        representantPrenom: '',
+        representantCivilite: '',
+        representantFonction: '',
+        representantTelephone: '',
+        representantEmail: '',
         // Descriptif
-        taches: 'Développement d\'une nouvelle fonctionnalité en React et Node.js. Participation aux réunions de sprint et revues de code.',
-        environnementTechno: 'React, Node.js, PostgreSQL, Docker, Gitlab.',
-        formations: 'Formation interne sur l\'architecture microservices de l\'entreprise.',
-        objectifs: 'Acquérir de l\'autonomie sur l\'intégralité du cycle de développement logiciel (Full Stack).',
-        nbCollaborateurs: '5',
-        commentaires: 'Stage de fin d\'études, essentiel pour la validation du diplôme. Le stagiaire sera encadré par un tuteur expérimenté.',
+        taches: '',
+        environnementTechno: '',
+        formations: '',
+        objectifs: '',
+        nbCollaborateurs: '',
+        commentaires: '',
         // Indemnité
-        indemniteMontant: '1000',
+        indemniteMontant: '',
         indemniteMonnaie: 'EUROS',
-        indemniteCommentaire: 'Montant mensuel net, inclut les frais de transport et les tickets restaurant.'
+        indemniteCommentaire: ''
     });
 
     const handleChange = (e) => {
@@ -57,11 +61,12 @@ const Generer = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        await createConvention(formData);
         generatePdf(); // Appel à la fonction de génération
         setTimeout(() => {
-           navigate('/dashboard');
+           navigate('/documents/genere');
         }, 1000);
     };
 
@@ -78,7 +83,7 @@ const Generer = () => {
         const pageHeight = doc.internal.pageSize.getHeight();
         const margin = 15;
         let yPos = 15;
-        const contentWidth = pageWidth - 2 * margin;
+         const contentWidth = pageWidth - 2 * margin;
         const ynovBlue = [0, 51, 102]; // Bleu Ynov foncé
         const grayDark = [50, 50, 50];
 
@@ -269,13 +274,9 @@ const Generer = () => {
     // --------------------------------------------------------------------------------
 
     // Reste du code du composant React (votre formulaire HTML)
-    return (
-        <DashboardLayout>
-            <div className="convention-container">
-                <div className="convention-header">
-                    <img src={Ynov} alt="Ynov Campus" className="logo-ynov" />
-                    <h1>Générer une Convention de Stage</h1>
-                </div>
+  return (
+    <DashboardLayout pageTitle="Générer une Convention de Stage" pageDescription="">
+      <div className="convention-container">
                 <form onSubmit={handleSubmit} className="convention-form">
 
                 <fieldset>

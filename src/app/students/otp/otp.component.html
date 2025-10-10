@@ -1,0 +1,14 @@
+<div class="login-bg">
+  <div class="login-container">
+    <h2>Vérification</h2>
+    <p>Un code a été envoyé à votre adresse e-mail.</p>
+    <form (ngSubmit)="onSubmit()" #otpForm="ngForm">
+      <div class="input-group">
+        <span class="input-icon"><i class="fa fa-key"></i></span>
+        <input type="text" maxlength="6" placeholder="Code OTP" required [(ngModel)]="otp" name="otp">
+      </div>
+      <button type="submit" class="login-btn" [disabled]="!otpForm.form.valid">Vérifier</button>
+    </form>
+  </div>
+</div>
+</div>

@@ -1,20 +1,59 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "convex/react";
+import { api } from "../convex/_generated/api";
 import DashboardLayout from "./DashboardLayout";
 import "./Dashboard.css";
 
 const Demandes = () => {
   const navigate = useNavigate();
 
-  const [demandes, setDemandes] = useState([
-    { id: 1, date: "18/08/2025 10:00", personne: "Laz Livith Désiré", message: "Laz Livith Désiré demande son bulletin de bachelor.", type: "Bulletin", lu: false, processingStatus: "en cours" },
-    { id: 2, date: "18/08/2025 13:00", personne: "Walid Mouahiddi", message: "Walid Mouahiddi demande la réédition de son badge étudiant.", type: "Convention", lu: false, processingStatus: "validé" },
-    { id: 3, date: "18/08/2025 14:00", personne: "Amine Fatih", message: "Amine Fatih demande son bulletin de bachelor.", type: "Bulletin", lu: false, processingStatus: "rejeté" },
-    { id: 4, date: "19/08/2025 09:30", personne: "Chaimaa Mellouk", message: "Chaimaa Mellouk demande une attestation de scolarité.", type: "Attestation", lu: false, processingStatus: "en cours" },
-    { id: 5, date: "19/08/2025 11:45", personne: "Laila Lamsaski", message: "Laila Lamsaski demande un relevé de notes du semestre 2.", type: "Relevé de notes", lu: false, processingStatus: "validé" },
-    { id: 6, date: "21/08/2025 10:10", personne: "Sam Essoh", message: "Sam Essoh demande un certificat de scolarité.", type: "Certificat", lu: false, processingStatus: "en cours" },
-    { id: 7, date: "20/08/2025 15:20", personne: "Nabel Abdel Ali", message: "Nabil Abdel Ali demande la réédition de son badge étudiant.", type: "Convention", lu: false, processingStatus: "rejeté" },
-  ]);
+  // Fetch real data from Convex
+  const conventions = useQuery(api.conventions.listInternshipConventions);
+  const attestations = useQuery(api.attestations.listAttestations);
+  const mobileDemandes = useQuery(api.demandes.listDemandes);
+
+  // Combine and format the data
+  const [demandes, setDemandes] = useState([]);
+
+  useEffect(() => {
+    if (conventions && attestations && mobileDemandes) {
+      const formattedConventions = conventions.map((conv, index) => ({
+        id: `conv-${conv._id}`,
+        date: new Date(conv.createdAt).toLocaleString('fr-FR'),
+        personne: conv.userName || "Utilisateur inconnu",
+        message: `${conv.userName} demande une convention de stage pour ${conv.entrepriseNom}.`,
+        type: "Convention de stage",
+        lu: false,
+        processingStatus: conv.status === "Pending" ? "en cours" : conv.status.toLowerCase(),
+        data: conv,
+      }));
+
+      const formattedAttestations = attestations.map((att, index) => ({
+        id: `att-${att._id}`,
+        date: new Date(att.createdAt).toLocaleString('fr-FR'),
+        personne: att.userName || "Utilisateur inconnu",
+        message: `${att.userName} demande une attestation de frais de scolarité.`,
+        type: "Attestation de frais de scolarité",
+        lu: false,
+        processingStatus: att.status === "Pending" ? "en cours" : att.status.toLowerCase(),
+        data: att,
+      }));
+
+      const formattedMobileDemandes = mobileDemandes.map((dem) => ({
+        id: `mobile-${dem._id}`,
+        date: new Date(dem.submittedAt).toLocaleString('fr-FR'),
+        personne: `${dem.userFirstName || 'Utilisateur'} ${dem.userLastName || 'inconnu'}`,
+        message: `Demande ${dem.type.replace('_', ' ')} soumise via mobile.`,
+        type: dem.type.replace('_', ' ').toUpperCase(),
+        lu: false,
+        processingStatus: dem.status,
+        data: dem,
+      }));
+
+      setDemandes([...formattedConventions, ...formattedAttestations, ...formattedMobileDemandes]);
+    }
+  }, [conventions, attestations, mobileDemandes]);
 
   const [selectedIds, setSelectedIds] = useState([]);
   const [filter, setFilter] = useState("Tous");
@@ -164,7 +203,7 @@ const Demandes = () => {
                 <tr
                   key={d.id}
                   className={d.lu ? "lu" : "non-lu"}
-                  onClick={() => navigate(`/demandes/${d.id}`)}
+                  onClick={() => d.id.startsWith('mobile-') ? navigate(`/details-demandes/${d.id}`) : navigate(`/demandes/${d.id}`)}
                   style={{
                     cursor: "pointer",
                     background: '#F6F8FA',

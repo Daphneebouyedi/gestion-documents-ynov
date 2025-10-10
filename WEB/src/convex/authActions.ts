@@ -6,6 +6,7 @@ import bcrypt from 'bcryptjs'; // Changed back to bcryptjs
 import jwt from 'jsonwebtoken';
 import { api } from "./_generated/api";
 import { Id } from "./_generated/dataModel";
+import { insertActionLog } from "./internal";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const RESEND_API_KEY = process.env.RESEND_API_KEY; // transactional email provider API key
@@ -127,9 +128,11 @@ export const login = action({
       patch: { isOnline: true },
     });
 
-    await ctx.runMutation(api.user_actions.logAction, {
+    await ctx.runMutation("internal:insertActionLog" as any, {
       userId: user._id,
       action: "login",
+      details: { email: email }, // Add details for logging
+      timestamp: Date.now(),
     });
 
     console.log("User object from login action:", user);
@@ -148,9 +151,11 @@ export const logout = action({
       patch: { isOnline: false },
     });
 
-    await ctx.runMutation(api.user_actions.logAction, {
+    await ctx.runMutation("internal:insertActionLog" as any, {
       userId: userId,
       action: "logout",
+      details: { userId: userId }, // Add details for logging
+      timestamp: Date.now(),
     });
   },
 });
@@ -188,6 +193,16 @@ export const startLoginWithOtp = action({
     await sendOtpEmail(email, code);
 
     return { challenge };
+  },
+});
+
+export const sendOtpEmailAction = action({
+  args: {
+    to: v.string(),
+    code: v.string(),
+  },
+  handler: async (ctx, { to, code }): Promise<void> => {
+    await sendOtpEmail(to, code);
   },
 });
 
@@ -342,6 +357,29 @@ export const adminInsertUser = action({
   },
 });
 
+export const getUserByToken = action({
+  args: {
+    authToken: v.string(),
+  },
+  handler: async (ctx, { authToken }): Promise<any> => {
+    const JWT_SECRET = process.env.JWT_SECRET;
+    if (!JWT_SECRET) {
+      throw new Error("JWT_SECRET is not set");
+    }
+    try {
+      const decoded = jwt.verify(authToken, JWT_SECRET) as { userId: string };
+      const userId = decoded.userId as Id<"users">;
+      const user = await ctx.runQuery(api.auth.getUser, { userId });
+      if (!user) {
+        return null; // Return null if user not found
+      }
+      return user;
+    } catch (error) {
+      throw new Error("Invalid or expired token");
+    }
+  },
+});
+
 export const sendProfileUpdateNotification = action({
   args: {
     userId: v.id("users"),
@@ -359,6 +397,17 @@ export const sendProfileUpdateNotification = action({
       console.error("User not found for sending profile update notification.");
       return;
     }
+
+    // Update user profile using the specific updateUserProfile mutation
+    await ctx.runMutation(api.auth.updateUserProfile, {
+      userId: userId,
+      phone: updatedData.phone,
+      address: updatedData.address,
+      country: updatedData.country,
+      ville: updatedData.ville,
+      photoUrl: updatedData.photoUrl,
+      profileComplete: true, // Assuming profile is complete after update
+    });
 
     // Send email to user
     const userSubject = "Mise à jour de votre profil";
@@ -391,9 +440,97 @@ Photo de profil : ${updatedData.photoUrl || "N/A"}
       console.warn("ADMIN_EMAIL not configured. Skipping admin notification.");
     }
 
-    await ctx.runMutation(api.user_actions.logAction, {
+    await ctx.runMutation("internal:insertActionLog" as any, {
       userId: userId,
       action: "profile_update",
+      details: updatedData,
+      timestamp: Date.now(),
     });
+  },
+});
+
+async function sendReminderEmail(to: string, firstName: string, lastName: string, documentType: string, deadline: string) {
+  const subject = `Rappel : Document en attente - ${documentType}`;
+  const body = `Bonjour ${firstName} ${lastName},
+
+Nous vous rappelons que le document suivant est en attente de traitement :
+
+Type de document : ${documentType}
+Date limite : ${deadline}
+
+Veuillez soumettre ce document dès que possible pour éviter tout retard.
+
+Cordialement,
+L'équipe administrative
+YNOV Campus`;
+
+  // Prefer SendGrid if configured
+  if (SENDGRID_API_KEY) {
+    try {
+      const payload = {
+        personalizations: [ { to: [ { email: to } ] } ],
+        from: { email: SENDGRID_FROM },
+        subject: subject,
+        content: [ { type: "text/plain", value: body } ]
+      };
+      const resp = await fetch("https://api.sendgrid.com/v3/mail/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SENDGRID_API_KEY}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!resp.ok) {
+        const txt = await resp.text();
+        console.warn("[REMINDER EMAIL] Failed to send via SendGrid:", resp.status, txt);
+      }
+      return;
+    } catch (e) {
+      console.warn("[REMINDER EMAIL] Error sending via SendGrid:", e);
+      return;
+    }
+  }
+
+  // Fallback to Resend if configured
+  if (RESEND_API_KEY) {
+    try {
+      const resp = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${RESEND_API_KEY}`,
+        },
+        body: JSON.stringify({
+          from: RESEND_FROM,
+          to: [to],
+          subject: subject,
+          text: body,
+        }),
+      });
+      if (!resp.ok) {
+        const txt = await resp.text();
+        console.warn("[REMINDER EMAIL] Failed to send via Resend:", resp.status, txt);
+      }
+    } catch (e) {
+      console.warn("[REMINDER EMAIL] Error sending via Resend:", e);
+    }
+    return;
+  }
+
+  // Last resort: log
+  console.warn("[REMINDER EMAIL] No email provider configured. Cannot send reminder email.");
+}
+
+export const sendReminderEmailAction = action({
+  args: {
+    to: v.string(),
+    firstName: v.string(),
+    lastName: v.string(),
+    documentType: v.string(),
+    deadline: v.string(),
+  },
+  handler: async (ctx, { to, firstName, lastName, documentType, deadline }) => {
+    await sendReminderEmail(to, firstName, lastName, documentType, deadline);
   },
 });

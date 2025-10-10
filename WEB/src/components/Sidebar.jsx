@@ -1,11 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useQuery, useAction } from "convex/react";
+import { api } from "../convex/_generated/api";
 
 const Sidebar = ({ showUserMenu, setShowUserMenu }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showGenererPanel, setShowGenererPanel] = React.useState(false);
   const [showDocumentsPanel, setShowDocumentsPanel] = React.useState(false);
+
+  const [token, setToken] = useState(null);
+  const [userIdFromToken, setUserIdFromToken] = useState(null);
+  const verifyTokenAction = useAction(api.authActions.verifyTokenAction);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("jwtToken");
+    if (storedToken) {
+      setToken(storedToken);
+      const verifyAndSetUserId = async () => {
+        try {
+          const id = await verifyTokenAction({ token: storedToken });
+          setUserIdFromToken(id);
+        } catch (error) {
+          console.error("Token verification failed:", error);
+          localStorage.removeItem("jwtToken");
+          navigate("/login");
+        }
+      };
+      verifyAndSetUserId();
+    } else {
+      navigate("/login");
+    }
+  }, [token, verifyTokenAction, navigate]);
+
+  const user = useQuery(api.auth.getUser, userIdFromToken ? { userId: userIdFromToken } : "skip");
 
   const navItemStyle = {
     borderRadius: 8,
@@ -236,8 +264,12 @@ const Sidebar = ({ showUserMenu, setShowUserMenu }) => {
               <span style={{ position: 'absolute', bottom: 6, right: 6, width: 14, height: 14, borderRadius: '50%', background: '#23c16b', border: '2.5px solid #fff', boxShadow: '0 0 0 2px #23c2a2' }}></span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}>
-              <span style={{ fontWeight: 700, fontSize: 18, color: '#222', letterSpacing: 0.2 }}>Admin</span>
-              <span style={{ color: '#23c2a2', fontSize: 14, fontWeight: 500, letterSpacing: 0.1 }}>contact@etando.ma</span>
+              <span style={{ fontWeight: 700, fontSize: 18, color: '#222', letterSpacing: 0.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>
+                {user ? `${user.firstName} ${user.lastName}` : 'Admin'}
+              </span>
+              <span style={{ color: '#23c2a2', fontSize: 14, fontWeight: 500, letterSpacing: 0.1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>
+                {user ? user.email : 'contact@etando.ma'}
+              </span>
               <span style={{ marginTop: 4, background: '#e6f7f1', color: '#23c2a2', fontWeight: 600, borderRadius: 8, padding: '2.5px 12px', fontSize: 13, letterSpacing: 0.2, border: '1.5px solid #23c2a2' }}>Administrateur</span>
             </div>
           </div>

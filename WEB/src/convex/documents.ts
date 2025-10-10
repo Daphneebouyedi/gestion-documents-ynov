@@ -135,3 +135,31 @@ export const getTotalTransferredDocuments = query({
     return documents.length;
   },
 });
+
+export const getUserTransferredDocuments = query({
+  args: { userId: v.string() },
+  handler: async (ctx, { userId }) => {
+    const documents = await ctx.db.query("documents").filter((q) => q.eq(q.field("student"), userId)).collect();
+    const documentsWithUrls = await Promise.all(
+      documents.map(async (doc) => {
+        const url = await ctx.storage.getUrl(doc.storageId);
+        return { ...doc, url };
+      })
+    );
+    return documentsWithUrls;
+  },
+});
+
+export const getUserBulletins = query({
+  args: { userId: v.string() },
+  handler: async (ctx, { userId }) => {
+    const documents = await ctx.db.query("documents").filter((q) => q.eq(q.field("student"), userId) && q.eq(q.field("docType"), "Bulletin")).collect();
+    const documentsWithUrls = await Promise.all(
+      documents.map(async (doc) => {
+        const url = await ctx.storage.getUrl(doc.storageId);
+        return { ...doc, url };
+      })
+    );
+    return documentsWithUrls;
+  },
+});

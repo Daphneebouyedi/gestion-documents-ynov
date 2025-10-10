@@ -46,15 +46,10 @@ export const requestConvention = mutation({
     if (!identity) {
       throw new Error("Non authentifié. Veuillez vous connecter pour demander une convention.");
     }
-    // In a real application, you would store this request in a database table
-    // For now, we'll just log it.
+    
     console.log("Convention Request Received:", args);
 
-    // Example: Store in a 'conventionRequests' table (you'd need to define this in schema.ts)
-    // await ctx.db.insert("conventionRequests", {
-    //   ...args,
-    //   createdAt: Date.now(),
-    // });
+   
 
     return { success: true, message: "Convention request received successfully!" };
   },
@@ -192,6 +187,7 @@ export const createInternshipConvention = mutation({
     }
     const id = await ctx.db.insert("internshipConventions", {
       ...args,
+      userId: identity.subject as any,
       createdAt: Date.now(),
     });
     return id;
@@ -202,5 +198,19 @@ export const listInternshipConventions = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db.query("internshipConventions").collect();
+  },
+});
+
+export const getUserInternshipConventions = query({
+  args: { userId: v.id("users") },
+  handler: async (ctx, { userId }) => {
+    return await ctx.db.query("internshipConventions").filter(q => q.eq(q.field("userId"), userId)).collect();
+  },
+});
+
+export const getUserConventions = query({
+  args: { userId: v.string() },
+  handler: async (ctx, { userId }) => {
+    return await ctx.db.query("conventions").filter(q => q.eq(q.field("idCandidat"), userId)).collect();
   },
 });

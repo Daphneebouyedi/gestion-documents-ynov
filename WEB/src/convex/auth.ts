@@ -40,8 +40,9 @@ export const updateUser = mutation({
     role: v.optional(v.string()),
     promotion: v.optional(v.string()),
     specialite: v.optional(v.string()),
+    isActive: v.optional(v.boolean()),
   },
-  handler: async (ctx, { userId, firstName, lastName, email, role, promotion, specialite }) => {
+  handler: async (ctx, { userId, firstName, lastName, email, role, promotion, specialite, isActive }) => {
     const user = await ctx.db.get(userId);
 
     if (!user) {
@@ -55,6 +56,7 @@ export const updateUser = mutation({
     if (role !== undefined) updates.role = role;
     if (promotion !== undefined) updates.promotion = promotion;
     if (specialite !== undefined) updates.specialite = specialite;
+    if (isActive !== undefined) updates.isActive = isActive;
 
     await ctx.db.patch(userId, updates);
     return ctx.db.get(userId);

@@ -505,18 +505,6 @@ const GestionUtilisateurs = () => {
                   <td>{user.specialite}</td>
                   <td style={{ position: 'relative' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'center' }}>
-                      {/* Switch d'activation */}
-                      <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', marginRight: 8 }}>
-                        <input
-                          type="checkbox"
-                          checked={user.isActive}
-                          onChange={async (e) => {
-                            await updateUserMutation({ userId: user._id, isActive: !user.isActive });
-                          }}
-                           style={{ accentColor: user.isActive ? '#32CD32' : '#FF0000', width: 18, height: 18 }}
-                        />
-                        <span style={{ marginLeft: 4, fontSize: 13 }}>{user.isActive ? 'Actif' : 'Inactif'}</span>
-                      </label>
                       <button
                         className="ellipsis-action"
                         style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}

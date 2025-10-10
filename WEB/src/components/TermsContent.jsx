@@ -108,21 +108,7 @@ const TermsContent = ({ readOnly = false }) => {
           </section>
         </main>
 
-        {!readOnly && (
-          <footer className="terms-footer">
-            <label>
-              <input 
-                type="checkbox" 
-                checked={isChecked} 
-                onChange={() => setIsChecked(!isChecked)} 
-              />
-              J'ai lu et j'accepte les conditions d'utilisation et de confidentialité.
-            </label>
-            <button onClick={handleAcceptTerms} disabled={!isChecked}>
-              Accepter et continuer vers le tableau de bord
-            </button>
-          </footer>
-        )}
+        {/* Removed the checkbox, label, and button as per request */}
         </div>
       </div>
     </DashboardLayout>
