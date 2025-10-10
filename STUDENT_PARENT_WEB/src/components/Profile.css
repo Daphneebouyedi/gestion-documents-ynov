@@ -1,0 +1,246 @@
+/* Container global */
+.gestion-container {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.logo-image {
+  width: 150px;      /* largeur de l'image */
+  height: auto;      /* conserve les proportions */
+  display: block;
+  margin: 0 auto 20px auto; /* centre et ajoute un espace sous l'image */
+}
+
+/* Navigation */
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nav-button:hover {
+  background-color: #34495e;
+}
+
+.nav-button.active {
+  background-color: #ffffff;
+}
+
+.nav-button.logout {
+  margin-top: auto;
+  background-color: #e74c3c;
+}
+
+.nav-button.logout:hover {
+  background-color: #c0392b;
+}
+
+/* Menus déroulants */
+.floating-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #34495e;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  z-index: 10;
+}
+
+.floating-menu-item {
+  padding: 10px 15px;
+  text-align: left;
+  font-size: 14px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.floating-menu-item:hover {
+  background-color: #1abc9c;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  background-color: #f4f6f8;
+  overflow-y: auto;
+}
+
+/* Profil Section */
+.profile-section {
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile-avatar img {
+  border-radius: 50%;
+}
+
+.profile-details h2 {
+  margin: 0;
+}
+
+.profile-details p {
+  margin: 2px 0;
+  color: #666;
+}
+
+/* Formulaire */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input,
+.form-group select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* Email Section */
+.email-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.email-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ecf0f1;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.add-email-btn {
+  align-self: flex-start;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background: #1abc9c;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-email-btn:hover {
+  background: #16a085;
+}
+
+.add-email-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Bouton Modifier */
+.edit-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background: #3498db;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.edit-button:hover {
+  background: #2980b9;
+}
+
+.email-item {
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* ✅ Formulaire d'ajout de mail */
+.add-email-form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.add-email-form input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.add-email-form button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background: #1abc9c;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-email-form button:hover {
+  background: #16a085;
+}
+
+/* ✅ Bouton Annuler dans le formulaire */
+.add-email-form button:last-child {
+  background: #e74c3c;
+}
+
+.add-email-form button:last-child:hover {
+  background: #c0392b;
+}

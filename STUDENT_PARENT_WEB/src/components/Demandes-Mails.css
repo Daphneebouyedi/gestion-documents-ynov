@@ -1,0 +1,221 @@
+/* Layout général */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+    background: #f7f8fa;
+}
+
+.logo-image {
+  width: 150px;      /* largeur de l'image */
+  height: auto;      /* conserve les proportions */
+  display: block;
+  margin: 0 auto 20px auto; /* centre et ajoute un espace sous l'image */
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.nav-button {
+  padding: 1rem 2rem;
+  border: none;
+  background: none;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  font-size: 1rem;
+    color: #222;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    transition: background 0.18s, color 0.18s;
+}
+
+.nav-button:hover {
+  background-color: #ffffff4e;
+    background-color: #f6f8fa;
+    color: #222;
+}
+
+.nav-button.active {
+  background-color: #ffffff;
+  color: #4ECDC4;
+    background-color: #f6e9b0;
+    color: #222;
+    font-weight: bold;
+}
+
+.nav-button.logout {
+  margin-top: auto !important;
+  background-color: #E53E3E;
+  text-align: center;
+  font-weight: bold;
+    background-color: #e74c3c;
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(231,76,60,0.07);
+}
+
+.nav-button.logout:hover {
+  background-color: #C53030;
+}
+
+.content-wrapper {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+    max-width: 700px;
+    margin: 40px auto 0 auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.07);
+    padding: 40px 32px 32px 32px;
+}
+
+/* Mail Item */
+.mail-item {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 4rem;
+  transition: 0.3s;
+    background-color: #f6f8fa;
+    border-radius: 14px;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    margin-bottom: 2rem;
+}
+
+.mail-header {
+  border-bottom: 1px solid #E1E8ED;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 6px 24px rgba(246,233,176,0.13);
+  background: #fffbe6;
+    border-bottom: 1px solid #ececec;
+}
+
+.mail-header p {
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+  color: #34495E;
+    font-size: 1rem;
+    color: #444;
+}
+
+.mail-header p strong {
+  color: #2C3E50;
+    color: #222;
+}
+
+.mail-body {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #2C3E50;
+    font-size: 1.08rem;
+    color: #222;
+}
+
+.mail-body p {
+  margin: 0.8rem 0;
+}
+
+.mail-footer {
+  margin-top: 2rem;
+  font-size: 0.95rem;
+  color: #34495E;
+  border-top: 1px solid #E1E8ED;
+  padding-top: 1rem;
+    font-size: 1rem;
+    color: #888;
+    border-top: 1px solid #ececec;
+}
+
+.mail-footer p {
+  margin: 0.5rem 0;
+}
+
+/* Boutons d'action dans le mail (si besoin) */
+.mail-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.mail-actions button {
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.mail-actions .btn-reply {
+  background-color: #1ABC9C;
+  color: #fff;
+    background-color: #f6e9b0;
+    color: #222;
+    box-shadow: 0 2px 8px rgba(246,233,176,0.09);
+    border: 1px solid #ececec;
+}
+
+.mail-actions .btn-reply:hover {
+  background-color: #16A085;
+    background-color: #fffbe6;
+    color: #222;
+    border: 1px solid #f6e9b0;
+}
+
+.mail-actions .btn-delete {
+  background-color: #E74C3C;
+  color: #fff;
+}
+
+.mail-actions .btn-delete:hover {
+  background-color: #C0392B;
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+  .sidebar {
+    width: 200px;
+  }
+}
+
+@media (max-width: 700px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .nav-button {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+.mail-actions {
+  display: flex;
+  justify-content: flex-end; 
+  margin-top: 1.5rem;
+}
+
+.mail-actions .btn-reply {
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  background-color: #4ECDC4; 
+  color: #fff;
+  font-size: 1rem;
+}
+
+.mail-actions .btn-reply:hover {
+  background-color: #379E96; 
+}

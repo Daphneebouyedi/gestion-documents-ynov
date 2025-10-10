@@ -1,0 +1,145 @@
+.info-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.sidebar {
+  background-color: #4ECDC4 !important; 
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 2rem 1.5rem !important;
+  color: white !important;
+}
+
+/* Main Content */
+.main-content-info {
+  display: flex;
+  flex-direction: column;
+  background-color: #f7fafc;
+  overflow-y: auto;
+  padding-left: 20px;
+  padding-top: 20px;
+  width: 100%;
+}
+
+.logo-image {
+  width: 150px;      
+  height: auto;      
+  display: block;
+  margin: 0 auto 20px auto; 
+}
+
+.nav-button {
+  padding: 12px;
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nav-button:hover,
+.nav-button.active {
+  background-color: #34495e;
+}
+
+.nav-button.logout {
+  margin-top: auto;
+  background-color: #e74c3c;
+}
+
+.floating-menu-item {
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.floating-menu-item:hover {
+  background-color: #2c3e50;
+}
+
+/* Carte utilisateur */
+.user-card {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-card img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #4ECDC4;
+}
+
+.user-card-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-card h2 {
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.user-card p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.statut {
+  font-weight: bold;
+  margin-left: 8px;
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+
+.statut.actif {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.statut.inactif {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.back-button {
+  width: 300px;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #4ECDC4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.back-button:hover {
+  background-color: #3bb2a8;
+}
+
+/* Responsive : sur mobile, la carte s'empile verticalement */
+@media (max-width: 768px) {
+  .user-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .user-card img {
+    margin-bottom: 15px;
+  }
+}

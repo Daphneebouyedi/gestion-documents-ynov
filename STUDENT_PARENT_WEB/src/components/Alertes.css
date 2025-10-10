@@ -1,0 +1,183 @@
+/* Layout général */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.logo-image {
+  width: 150px;      /* largeur de l'image */
+  height: auto;      /* conserve les proportions */
+  display: block;
+  margin: 0 auto 20px auto; /* centre et ajoute un espace sous l'image */
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+
+.nav-button {
+  padding: 1rem 2rem;
+  border: none;
+  background: none;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.nav-button:hover {
+  background-color: #ffffff4e;
+}
+
+.nav-button.active {
+  background-color: #ffffff;
+  color: #4ECDC4;
+}
+
+.nav-button.logout {
+  margin-top: auto;
+  background-color: #E53E3E;
+  text-align: center;
+  font-weight: bold;
+}
+
+.nav-button.logout:hover {
+  background-color: #C53030;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.welcome-title-dashboard {
+  color: #4ECDC4;
+  font-size: 2.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+/* Légende */
+.legend {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.legend-lu {
+  background-color: #E6FFFA;
+  color: #2F855A;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.legend-non-lu {
+  background-color: #FFF5F5;
+  color: #C53030;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* Boutons action */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-lu, .btn-non-lu {
+  padding: 0.6rem 1.5rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.btn-lu {
+  background-color: #38B2AC;
+}
+
+.btn-lu:hover {
+  background-color: #2C7A7B;
+}
+
+/* Tableau notifications */
+.notifications-table-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  overflow-x: auto;
+}
+
+.notifications-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.notifications-table th,
+.notifications-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #E2E8F0;
+  text-align: left;
+  font-size: 0.95rem;
+  color: #4A5568;
+}
+
+.notifications-table th {
+  background-color: #EDF2F7;
+  font-weight: 600;
+  color: #2D3748;
+}
+
+.notifications-table tr.lu {
+  background-color: #E6FFFA; /* vert clair pour lu */
+}
+
+.notifications-table tr.non-lu {
+  background-color: #FFF5F5; /* rouge clair pour non lu */
+}
+
+.notifications-table input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Menu flottant pour notifications et documents */
+.floating-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #CBD5E0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.floating-menu .nav-button.floating-menu-item {
+  color: #1A202C;
+  background: none;
+  text-align: left;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.floating-menu .nav-button.floating-menu-item:hover {
+  background-color: #EDF2F7;
+}

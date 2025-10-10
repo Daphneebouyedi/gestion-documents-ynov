@@ -1,0 +1,320 @@
+/* ========== CONTENEUR PRINCIPAL ========== */
+.gestion-container .sidebar {
+  background-color: #4ECDC4 !important; 
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 2rem 1.5rem !important;
+  color: white !important;
+}
+
+.logo-image {
+  width: 150px; /* Ajuste la taille selon ton design */
+}
+
+/* Navigation */
+.navigation {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  padding: 12px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.nav-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-button.active {
+  background-color: #4ECDC4;
+}
+
+.logout {
+  margin-top: auto;
+  background-color: red;
+  color: white;
+}
+
+.logout:hover {
+  background-color: red;
+}
+
+/* Floating menu (Documents sous-menu) */
+.floating-menu {
+  background-color: #2c2c3e;
+  border-radius: 6px;
+  padding: 5px;
+  margin-left: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.floating-menu-item {
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.floating-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ================= CONTENU PRINCIPAL ================= */
+.main-content {
+  flex-direction: column;
+  background-color: #f7fafc;
+  overflow-y: auto;
+  padding-left: 20px; 
+  padding-right: 20px;
+}
+
+/* Bouton ajouter */
+.add-button {
+  width: 300px;
+  background-color: #4ECDC4;
+  color: white;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.add-button:hover {
+  background-color: #4ECDC4;
+}
+
+/* Filtres */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filters input,
+.filters select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.filters input:focus,
+.filters select:focus {
+  outline: none;
+  border-color: #4ECDC4;
+}
+
+/* Tableau utilisateurs */
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.users-table th, .users-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.users-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.users-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Bouton consulter */
+.button-info {
+  background-color: #4ECDC4;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  margin-right: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button-info:hover {
+  background-color: #3bb2a8;
+}
+
+/* Boutons action */
+.edit-button {
+  background-color: #4ECDC4;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  margin-right: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #4ECDC4;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f;
+}
+
+/* ===== MODAL (Formulaire ajout/modification) ===== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+  width: 400px;
+  max-width: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content h2 {
+  text-align: center;
+  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+/* Champs input/select */
+.modal-content input,
+.modal-content select {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 1rem;
+  transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+  background-color: #4ECDC4;
+  box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
+}
+
+/* Actions boutons modal */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.confirm-button,
+.cancel-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.95rem;
+  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.confirm-button {
+  background-color: #4ECDC4;
+  color: white;
+}
+
+.confirm-button:hover {
+  background-color: #4ECDC4;
+  transform: scale(1.03);
+}
+
+.cancel-button {
+  background-color: red;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: red;
+  transform: scale(1.03);
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+    /* La sidebar passe en haut et prend toute la largeur */
+    .gestion-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-width: auto;
+        padding: 15px;
+        height: auto;
+        /* Ajout d'un flex-wrap pour que les éléments de navigation puissent s'empiler si nécessaire */
+        flex-wrap: wrap; 
+        flex-direction: row !important; /* Affichage horizontal sur mobile */
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo-image {
+        margin: 0;
+        width: 120px;
+    }
+    
+    .navigation {
+        display: none; 
+    }
+    
+    .main-content {
+        padding: 15px;
+    }
+
+}
