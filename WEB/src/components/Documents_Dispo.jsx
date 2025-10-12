@@ -145,34 +145,30 @@ const DocumentsDispo = () => {
     <DashboardLayout pageTitle="Documents disponibles" pageDescription="Consultez et gérez les documents mis à disposition">
 
         {/* Button to add document */}
-        <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'flex-end' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
           <button
             onClick={() => setShowAddModal(true)}
             style={{
-              background: 'linear-gradient(135deg, #4ECDC4 0%, #003366 100%)',
-              color: 'white',
+              width: '300px',
+              backgroundColor: '#4ECDC4',
+              color: '#fff',
+              padding: '0.7rem 1.5rem',
+              fontSize: '1rem',
               border: 'none',
-              borderRadius: 8,
-              padding: '12px 24px',
-              fontSize: 16,
-              fontWeight: 'bold',
+              borderRadius: '6px',
+              fontWeight: 600,
               cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              boxShadow: '0 4px 12px rgba(78, 205, 196, 0.3)',
-              transition: 'all 0.3s ease',
+              boxShadow: '0 2px 8px rgba(45,114,254,0.08)',
+              transition: 'all 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 16px rgba(78, 205, 196, 0.4)';
+              e.currentTarget.style.backgroundColor = '#3DBCB4';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(78, 205, 196, 0.3)';
+              e.currentTarget.style.backgroundColor = '#4ECDC4';
             }}
           >
-            <FaPlus /> Ajouter un document
+            + Ajouter un document
           </button>
         </div>
 
