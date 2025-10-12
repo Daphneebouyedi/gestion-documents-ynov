@@ -139,37 +139,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Alertes et documents en attente */}
-        <div className="alerts-card">
-          <h2>🔔 Alertes et documents en attente</h2>
-          <div className="alerts-table-wrapper">
-            <table className="alerts-table">
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Description</th>
-                  <th>Date limite</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {alertsData.map((alert, index) => (
-                  <tr key={index}>
-                    <td>
-                      <span className={`alert-badge ${alert.severity}`}>{alert.type}</span>
-                    </td>
-                    <td>{alert.description}</td>
-                    <td>{alert.deadline}</td>
-                    <td>
-                      <button className="view-folder-button">Voir le dossier</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
         {/* Historique des actions */}
         <div className="logs-card">
           <h2>Historique des actions</h2>
