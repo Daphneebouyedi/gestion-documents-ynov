@@ -112,12 +112,27 @@ const Demander = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await createConvention({
-            ...formData,
-            type: 'Convention de stage'
-        });
-        generatePdf(); // Appel à la fonction de génération
-        navigate('/demandes');
+        
+        if (!userIdFromToken) {
+          alert("Erreur: Utilisateur non identifié");
+          return;
+        }
+        
+        try {
+          await createConvention({
+              ...formData,
+              type: 'Convention de stage',
+              userId: userIdFromToken,
+              status: 'En attente'
+          });
+          
+          alert("Demande de convention de stage envoyée avec succès!");
+          generatePdf();
+          navigate('/demandes');
+        } catch (error) {
+          console.error("Erreur lors de la création de la convention:", error);
+          alert("Échec de l'enregistrement de la convention.");
+        }
     };
 
     const handleBack = () => {

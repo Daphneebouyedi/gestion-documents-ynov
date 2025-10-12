@@ -196,6 +196,11 @@ const AttestationReussite = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!userIdFromToken) {
+      alert("Erreur: Utilisateur non identifié");
+      return;
+    }
+
     try {
       await requestAttestation({
         nom: formData.nom,
@@ -208,15 +213,21 @@ const AttestationReussite = () => {
         mention: formData.mention,
         type: 'Attestation de réussite',
         date: formData.date,
+        userId: userIdFromToken,
+        email: user?.email || '',
+        userName: `${user?.firstName || ''} ${user?.lastName || ''}`.trim(),
+        requestType: 'Attestation',
+        status: 'En attente',
       });
+      
+      alert("Demande d'attestation de réussite envoyée avec succès!");
+      generatePdf();
+      navigate("/demandes");
     } catch (err) {
       console.error("Erreur persistance attestation:", err);
       alert("Échec de l'enregistrement de l'attestation.");
       return;
     }
-
-    generatePdf();
-    navigate("/documents/genere");
   };
 
   return (

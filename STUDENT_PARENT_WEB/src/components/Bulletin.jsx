@@ -194,6 +194,11 @@ const Bulletin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!userIdFromToken) {
+      alert("Erreur: Utilisateur non identifié");
+      return;
+    }
+
     try {
       await requestAttestation({
         nom: formData.nom,
@@ -203,17 +208,23 @@ const Bulletin = () => {
         specialite: formData.specialite,
         anneeScolaire: formData.anneeScolaire,
         semestre: formData.semestre,
-        type: 'Bulletin',
+        type: 'Bulletin de notes',
         date: formData.date,
+        userId: userIdFromToken,
+        email: user?.email || '',
+        userName: `${user?.firstName || ''} ${user?.lastName || ''}`.trim(),
+        requestType: 'Bulletin',
+        status: 'En attente',
       });
+      
+      alert("Demande de bulletin envoyée avec succès!");
+      generatePdf();
+      navigate("/demandes");
     } catch (err) {
       console.error("Erreur persistance bulletin:", err);
       alert("Échec de l'enregistrement du bulletin.");
       return;
     }
-
-    generatePdf();
-    navigate("/documents/genere");
   };
 
   return (

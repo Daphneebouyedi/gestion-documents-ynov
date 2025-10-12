@@ -211,7 +211,7 @@ const AttestationInscription = () => {
     }
 
     generatePdf();
-    navigate("/documents/genere");
+    navigate("/demandes");
   };
 
   return (

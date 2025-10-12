@@ -7,10 +7,26 @@ import "./Dashboard.css";
 
 const Demandes = () => {
   const navigate = useNavigate();
+  
+  // Get current user ID
+  const [userId, setUserId] = useState(null);
+  
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      setUserId(storedUserId);
+    }
+  }, []);
 
-  // Fetch real data from Convex
-  const conventions = useQuery(api.conventions.listInternshipConventions);
-  const attestations = useQuery(api.attestations.listAttestations);
+  // Fetch real data from Convex - Filter by userId
+  const conventions = useQuery(
+    api.conventions.getUserInternshipConventions, 
+    userId ? { userId } : "skip"
+  );
+  const attestations = useQuery(
+    api.attestations.getUserAttestations, 
+    userId ? { userId } : "skip"
+  );
   const mobileDemandes = useQuery(api.demandes.listDemandes);
 
   // Mutations
@@ -48,9 +64,9 @@ const Demandes = () => {
       const formattedAttestations = attestations.map((att, index) => ({
         id: `att-${att._id}`,
         date: new Date(att.createdAt).toLocaleString('fr-FR'),
-        type: "Attestation de frais de scolarité",
+        type: att.type || "Attestation",
         lu: false,
-        processingStatus: (att.status.toLowerCase() === "pending" || att.status.toLowerCase() === "generated") ? "envoyé" : att.status.toLowerCase(),
+        processingStatus: (att.status.toLowerCase() === "pending" || att.status.toLowerCase() === "generated" || att.status.toLowerCase() === "en attente") ? "envoyé" : att.status.toLowerCase(),
         data: att,
       }));
 
