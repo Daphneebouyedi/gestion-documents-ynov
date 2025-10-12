@@ -270,11 +270,13 @@ const DocumentsDispo = () => {
                     }}
                   >
                     <option value="">-- Choisir un type --</option>
+                    <option value="Convention de stage">Convention de stage</option>
+                    <option value="Convention d'étude">Convention d'étude</option>
+                    <option value="Attestation frais de scolarité">Attestation frais de scolarité</option>
+                    <option value="Attestation d'inscription">Attestation d'inscription</option>
+                    <option value="Attestation de réussite">Attestation de réussite</option>
                     <option value="Bulletin">Bulletin</option>
-                    <option value="Attestation">Attestation</option>
                     <option value="Certificat">Certificat</option>
-                    <option value="Convention">Convention</option>
-                    <option value="Relevé de notes">Relevé de notes</option>
                   </select>
                 </div>
 

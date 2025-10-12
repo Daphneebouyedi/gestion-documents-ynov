@@ -47,32 +47,36 @@ const DashboardLayout = ({ children, pageTitle, pageDescription }) => {
       </div>
       {/* Menu utilisateur flottant */}
       {showUserMenu === 'top' && (
-        <div className="user-menu" style={{ top: 80, right: 32 }}>
-          <div className="user-menu-item" onClick={() => { setShowUserMenu(false); navigate('/profil'); }}>
-            <img src="/la-personne.png" alt="Mon Profil" />
-            <span>Mon Profil</span>
-          </div>
-          <div className="user-menu-separator"></div>
-          <div className="user-menu-item" style={{ color: '#e53935' }} onClick={handleLogout}>
-            <img src="/bouton-dalimentation.png" alt="Déconnexion" />
-            <span>Se déconnecter</span>
-          </div>
+        <>
           <div onClick={() => setShowUserMenu(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1 }} />
-        </div>
+          <div className="user-menu" style={{ top: 80, right: 32 }}>
+            <div className="user-menu-item" onClick={() => { setShowUserMenu(false); navigate('/profil'); }}>
+              <img src="/la-personne.png" alt="Mon Profil" />
+              <span>Mon Profil</span>
+            </div>
+            <div className="user-menu-separator"></div>
+            <div className="user-menu-item" style={{ color: '#e53935' }} onClick={handleLogout}>
+              <img src="/bouton-dalimentation.png" alt="Déconnexion" />
+              <span>Se déconnecter</span>
+            </div>
+          </div>
+        </>
       )}
       {showUserMenu === 'bottom' && (
-        <div className="user-menu" style={{ left: 250, bottom: 32 }}>
-          <div className="user-menu-item" onClick={() => { setShowUserMenu(false); navigate('/profil'); }}>
-            <img src="/la-personne.png" alt="Mon Profil" />
-            <span>Mon Profil</span>
-          </div>
-          <div className="user-menu-separator"></div>
-          <div className="user-menu-item" style={{ color: '#e53935' }} onClick={handleLogout}>
-            <img src="/bouton-dalimentation.png" alt="Déconnexion" />
-            <span>Se déconnecter</span>
-          </div>
+        <>
           <div onClick={() => setShowUserMenu(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1 }} />
-        </div>
+          <div className="user-menu" style={{ left: 250, bottom: 32 }}>
+            <div className="user-menu-item" onClick={() => { setShowUserMenu(false); navigate('/profil'); }}>
+              <img src="/la-personne.png" alt="Mon Profil" />
+              <span>Mon Profil</span>
+            </div>
+            <div className="user-menu-separator"></div>
+            <div className="user-menu-item" style={{ color: '#e53935' }} onClick={handleLogout}>
+              <img src="/bouton-dalimentation.png" alt="Déconnexion" />
+              <span>Se déconnecter</span>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

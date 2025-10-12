@@ -6,6 +6,7 @@ import { generateAttestationInscriptionPDF } from '../utils/modernPdfGenerator';
 import { useMutation, useAction, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import DashboardLayout from './DashboardLayout';
+import { useActionLogger, ACTION_TYPES } from '../hooks/useActionLogger';
 
 const INFOS_ETABLISSEMENT = {
   directeur: "Mr. Amine ZNIBER",
@@ -17,6 +18,7 @@ const INFOS_ETABLISSEMENT = {
 const AttestationInscription = () => {
   const navigate = useNavigate();
   const addDemande = useMutation(api.demandes.addDemande);
+  const logAction = useActionLogger();
 
   const [token, setToken] = useState(null);
   const [userIdFromToken, setUserIdFromToken] = useState(null);

@@ -5,6 +5,7 @@ import "./Attestation.css";
 import { useMutation, useAction, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import DashboardLayout from './DashboardLayout';
+import { useActionLogger, ACTION_TYPES } from '../hooks/useActionLogger';
 
 const INFOS_ETABLISSEMENT = {
   directeur: "Mr. Amine ZNIBER",
@@ -16,6 +17,7 @@ const INFOS_ETABLISSEMENT = {
 const Bulletin = () => {
   const navigate = useNavigate();
   const addDemande = useMutation(api.demandes.addDemande);
+  const logAction = useActionLogger();
 
   const [token, setToken] = useState(null);
   const [userIdFromToken, setUserIdFromToken] = useState(null);
@@ -97,6 +99,18 @@ const Bulletin = () => {
         date: formData.date,
         title: `Demande de bulletin - ${formData.nom} ${formData.prenom}`,
       });
+      
+      // Log the action
+      await logAction(
+        ACTION_TYPES.DOCUMENT_REQUEST,
+        "Demande de bulletin de notes",
+        {
+          type: 'Bulletin de notes',
+          promotion: formData.promotion,
+          specialite: formData.specialite,
+          anneeScolaire: formData.anneeScolaire
+        }
+      );
       
       // Send confirmation email
       try {
