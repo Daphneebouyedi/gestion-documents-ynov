@@ -9,6 +9,7 @@ import DashboardLayout from './DashboardLayout';
 
 const Demander = () => {
     const navigate = useNavigate();
+  const addDemande = useMutation(api.demandes.addDemande);
   const createConvention = useMutation(api.conventions.createInternshipConvention);
 
     const [token, setToken] = useState(null);
@@ -119,7 +120,7 @@ const Demander = () => {
         }
         
         try {
-          await createConvention({
+          await addDemande({
               ...formData,
               type: 'Convention de stage',
               userId: userIdFromToken,

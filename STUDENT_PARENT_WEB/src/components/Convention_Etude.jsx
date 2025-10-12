@@ -10,7 +10,7 @@ import DashboardLayout from './DashboardLayout';
 
 const ConventionEtudeForm = () => {
   const navigate = useNavigate();
-  const createConvention = useMutation(api.conventions.createConvention);
+  const addDemande = useMutation(api.demandes.addDemande);
   const generateUploadUrl = useMutation(api.documents.generateUploadUrl);
 
   const getUserProfile = useAction(api.auth.getUserProfile);
@@ -142,7 +142,7 @@ const ConventionEtudeForm = () => {
     try {
       const { photoCandidat, ...restFormData } = formData; // Destructure to exclude photoCandidat
 
-      await createConvention({
+      await addDemande({
         ...restFormData, 
         type: 'Convention d\'étude',
         ...(photoCandidatStorageId !== undefined ? { photoCandidatStorageId } : {}),

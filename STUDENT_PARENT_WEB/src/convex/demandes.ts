@@ -34,13 +34,39 @@ export const addDemande = mutation({
   args: {
     type: v.string(),
     userId: v.id("users"),
-    submittedAt: v.number(),
+    submittedAt: v.optional(v.number()),
     status: v.string(),
-    attachmentId: v.id("_storage"),
+    attachmentId: v.optional(v.id("_storage")),
     title: v.optional(v.string()),
+    // Champs pour toutes les demandes
+    userEmail: v.optional(v.string()),
+    userName: v.optional(v.string()),
+    nom: v.optional(v.string()),
+    prenom: v.optional(v.string()),
+    dateNaissance: v.optional(v.string()),
+    promotion: v.optional(v.string()),
+    specialite: v.optional(v.string()),
+    // Champs spécifiques selon le type
+    anneeScolaire: v.optional(v.string()),
+    date: v.optional(v.string()),
+    // Convention de stage
+    entreprise: v.optional(v.string()),
+    poste: v.optional(v.string()),
+    adresseEntreprise: v.optional(v.string()),
+    dateDebut: v.optional(v.string()),
+    dateFin: v.optional(v.string()),
+    duree: v.optional(v.string()),
+    // Autres
+    details: v.optional(v.any()),
   },
   handler: async (ctx, args) => {
-    const demandeId = await ctx.db.insert("demandes", args);
+    const now = Date.now();
+    const demandeData = {
+      ...args,
+      submittedAt: args.submittedAt || now,
+      createdAt: now,
+    };
+    const demandeId = await ctx.db.insert("demandes", demandeData);
     return demandeId;
   },
 });

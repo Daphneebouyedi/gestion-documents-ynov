@@ -15,7 +15,7 @@ const INFOS_ETABLISSEMENT = {
 
 const Bulletin = () => {
   const navigate = useNavigate();
-  const requestAttestation = useMutation(api.attestations.requestAttestation);
+  const addDemande = useMutation(api.demandes.addDemande);
 
   const [token, setToken] = useState(null);
   const [userIdFromToken, setUserIdFromToken] = useState(null);
@@ -81,21 +81,21 @@ const Bulletin = () => {
     }
 
     try {
-      // Save bulletin request
-      await requestAttestation({
+      // Save bulletin request to demandes table
+      await addDemande({
+        type: 'Bulletin de notes',
+        userId: userIdFromToken,
+        status: 'En attente',
+        userEmail: user?.email || '',
+        userName: `${user?.firstName || ''} ${user?.lastName || ''}`.trim(),
         nom: formData.nom,
         prenom: formData.prenom,
         dateNaissance: formData.dateNaissance,
         promotion: formData.promotion,
         specialite: formData.specialite,
         anneeScolaire: formData.anneeScolaire,
-        type: 'Bulletin de notes',
         date: formData.date,
-        userId: userIdFromToken,
-        email: user?.email || '',
-        userName: `${user?.firstName || ''} ${user?.lastName || ''}`.trim(),
-        requestType: 'Bulletin',
-        status: 'En attente',
+        title: `Demande de bulletin - ${formData.nom} ${formData.prenom}`,
       });
       
       // Send confirmation email

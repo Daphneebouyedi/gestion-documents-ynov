@@ -25,7 +25,7 @@ const INFOS_BANCAIRES = {
 
 const AttestationForm = () => {
   const navigate = useNavigate();
-  const requestAttestation = useMutation(api.attestations.requestAttestation);
+  const addDemande = useMutation(api.demandes.addDemande);
 
   const [token, setToken] = useState(null);
   const [userIdFromToken, setUserIdFromToken] = useState(null);
@@ -310,7 +310,7 @@ const AttestationForm = () => {
     e.preventDefault();
 
     try {
-      await requestAttestation({
+      await addDemande({
         nom: formData.nom,
         prenom: formData.prenom,
         dateNaissance: formData.dateNaissance,

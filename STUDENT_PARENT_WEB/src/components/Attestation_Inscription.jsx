@@ -16,7 +16,7 @@ const INFOS_ETABLISSEMENT = {
 
 const AttestationInscription = () => {
   const navigate = useNavigate();
-  const requestAttestation = useMutation(api.attestations.requestAttestation);
+  const addDemande = useMutation(api.demandes.addDemande);
 
   const [token, setToken] = useState(null);
   const [userIdFromToken, setUserIdFromToken] = useState(null);
@@ -77,7 +77,7 @@ const AttestationInscription = () => {
     e.preventDefault();
 
     try {
-      await requestAttestation({
+      await addDemande({
         nom: formData.nom,
         prenom: formData.prenom,
         dateNaissance: formData.dateNaissance,
