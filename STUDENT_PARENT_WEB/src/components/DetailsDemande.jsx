@@ -388,7 +388,7 @@ const DetailsDemande = () => {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
     doc.setTextColor(0, 51, 102);
-    doc.text("BULLETIN DE NOTES", pageWidth - margin, yPos + 13, { align: 'right' });
+    doc.text("Bulletin de notes", pageWidth - margin, yPos + 13, { align: 'right' });
     
     doc.setDrawColor(78, 205, 196);
     doc.setLineWidth(2);

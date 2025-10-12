@@ -203,7 +203,7 @@ const Sidebar = ({ showUserMenu, setShowUserMenu }) => {
                 {user ? user.email : 'contact@etando.ma'}
               </span>
               <span style={{ marginTop: 4, background: '#e6f7f1', color: '#23c2a2', fontWeight: 600, borderRadius: 8, padding: '2.5px 12px', fontSize: 13, letterSpacing: 0.2, border: '1.5px solid #23c2a2' }}>
-                {user ? (user.role === 'student' ? 'Étudiant' : user.role === 'parent' ? 'Parent' : 'Administrateur') : 'Administrateur'}
+                {user ? user.role : 'Administrateur'}
               </span>
             </div>
           </div>

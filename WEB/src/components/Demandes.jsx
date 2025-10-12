@@ -40,16 +40,23 @@ const Demandes = () => {
         data: att,
       }));
 
-      const formattedMobileDemandes = mobileDemandes.map((dem) => ({
-        id: `mobile-${dem._id}`,
-        date: new Date(dem.submittedAt).toLocaleString('fr-FR'),
-        personne: `${dem.userFirstName || 'Utilisateur'} ${dem.userLastName || 'inconnu'}`,
-        message: `Demande ${dem.type.replace('_', ' ')} soumise via mobile.`,
-        type: dem.type.replace('_', ' ').toUpperCase(),
-        lu: false,
-        processingStatus: dem.status,
-        data: dem,
-      }));
+      const formattedMobileDemandes = mobileDemandes.map((dem) => {
+        let normalizedType = dem.type.replace('_', ' ');
+        // Normalize bulletin types to avoid duplicates
+        if (normalizedType.toLowerCase().includes('bulletin')) {
+          normalizedType = 'Bulletin de notes';
+        }
+        return {
+          id: `mobile-${dem._id}`,
+          date: new Date(dem.submittedAt).toLocaleString('fr-FR'),
+          personne: `${dem.userFirstName || 'Utilisateur'} ${dem.userLastName || 'inconnu'}`,
+          message: `Demande ${normalizedType} soumise via mobile.`,
+          type: normalizedType,
+          lu: false,
+          processingStatus: dem.status,
+          data: dem,
+        };
+      });
 
       setDemandes([...formattedConventions, ...formattedAttestations, ...formattedMobileDemandes]);
     }
@@ -63,7 +70,14 @@ const Demandes = () => {
   const [isConfirmation, setIsConfirmation] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
 
-  const types = ["Tous", ...Array.from(new Set(demandes.map(d => d.type))).sort()];
+  // Normalize types to avoid duplicates (e.g., "BULLETIN DE NOTES" and "Bulletin de notes")
+  const normalizedTypes = demandes.map(d => {
+    if (d.type.toLowerCase().includes('bulletin')) {
+      return 'Bulletin de notes';
+    }
+    return d.type;
+  });
+  const types = ["Tous", ...Array.from(new Set(normalizedTypes)).sort()];
 
   const toggleSelection = (id) => {
     setSelectedIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
@@ -108,7 +122,13 @@ const Demandes = () => {
     setShowModal(true);
   };
 
-  const filteredDemandes = filter === "Tous" ? demandes : demandes.filter(d => d.type === filter);
+  // Normalize demandes types before filtering
+  const normalizedDemandes = demandes.map(d => ({
+    ...d,
+    type: d.type.toLowerCase().includes('bulletin') ? 'Bulletin de notes' : d.type
+  }));
+
+  const filteredDemandes = filter === "Tous" ? normalizedDemandes : normalizedDemandes.filter(d => d.type === filter);
 
   return (
   <DashboardLayout pageTitle="Demandes" pageDescription="Gérez et traitez les demandes des utilisateurs">
@@ -117,8 +137,8 @@ const Demandes = () => {
         <div className="filters" style={{ display: 'flex', gap: 16, marginBottom: 24, marginTop: 0, flexWrap: 'wrap' }}>
           {types.map((t, idx) => {
             const count = t === "Tous"
-              ? demandes.filter(d => !d.lu).length
-              : demandes.filter(d => d.type === t && !d.lu).length;
+              ? normalizedDemandes.filter(d => !d.lu).length
+              : normalizedDemandes.filter(d => d.type === t && !d.lu).length;
             const isActive = filter === t;
             return (
               <div key={t} style={{ flex: 1, minWidth: 120, display: 'flex' }}>

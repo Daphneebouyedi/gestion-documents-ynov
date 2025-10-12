@@ -1,0 +1,457 @@
+.alerts-main-content {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.alerts-filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.alerts-filters-container h3 {
+  margin: 0;
+  font-size: 1.2em;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.alerts-filters {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.alerts-filters select {
+  flex: 1; /* Allow selects to grow */
+  min-width: 150px; /* Minimum width for selects */
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #fff; /* Changed to white for card-like */
+  font-size: 0.95em;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Added shadow for card-like */
+}
+
+.alerts-filters select:hover {
+  border-color: var(--primary-color); /* Hover effect */
+  box-shadow: 0 4px 8px rgba(35, 194, 162, 0.1); /* Enhanced shadow on hover */
+}
+
+.alerts-filters select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(35, 194, 162, 0.4); /* Stronger focus shadow */
+}
+
+/* New styles for action status buttons */
+.action-status-button {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75em;
+  font-weight: 600;
+  text-transform: capitalize;
+  border: none; /* Make it look like a button */
+  cursor: pointer; /* Indicate it's clickable */
+  transition: all 0.2s ease;
+}
+
+.action-status-button.status-relance {
+  background-color: #28a745; /* Green for 'relancé' */
+  color: #fff;
+}
+
+.action-status-button.status-attente {
+  background-color: #dc3545; /* Red for 'en attente' */
+  color: #fff;
+}
+
+.action-status-button:hover {
+  opacity: 0.8; /* Subtle hover effect */
+}
+
+.alerts-table-container {
+  overflow-x: auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.alerts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.alerts-table th,
+.alerts-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 0.9em;
+  color: #495057;
+}
+
+.alerts-table th {
+  background-color: #f1f3f5;
+  font-weight: 600;
+  color: #343a40;
+}
+
+.alerts-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.alert-profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+.alert-status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8em;
+  font-weight: 600;
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.alert-status-badge.red {
+  background-color: #dc3545; /* Bootstrap danger */
+}
+
+.alert-status-badge.orange {
+  background-color: #fd7e14; /* Bootstrap warning */
+}
+
+.alert-status-badge.blue {
+  background-color: #007bff; /* Bootstrap primary */
+}
+
+/* Actions Menu */
+.actions-cell {
+  position: relative;
+  width: 50px; /* Give some space for the button */
+}
+
+.three-dots-button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.three-dots-button:hover {
+  background-color: #f1f1f1;
+}
+
+.action-menu-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.action-menu {
+  position: absolute;
+  bottom: 100%; /* Position above the button */
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 180px;
+  z-index: 20; /* Ensure it's above other content */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* For border-radius on children */
+}
+
+.action-menu button {
+  background: none;
+  border: none;
+  padding: 10px 15px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: #333;
+  transition: background-color 0.2s ease, color 0.2s ease; /* Added color transition */
+  width: 100%;
+}
+
+.action-menu button:hover {
+  background-color: #f8f9fa;
+  color: var(--primary-color);
+}
+
+.add-button {
+  width: 300px;
+  background-color: #4ECDC4;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(45,114,254,0.08);
+}
+
+.add-button:hover {
+  background-color: #4ECDC4;
+}
+
+/* ===== MODAL ===== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+  width: 400px;
+  max-width: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content h2 {
+  text-align: center;
+  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+/* Champs input/select */
+.modal-content input,
+.modal-content select {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 1rem;
+  transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+  background-color: #4ECDC4;
+  box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
+}
+
+/* Actions boutons modal */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.confirm-button,
+.cancel-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.95rem;
+  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.confirm-button {
+  background-color: #4ECDC4;
+  color: white;
+}
+
+.confirm-button:hover {
+  background-color: #4ECDC4;
+  transform: scale(1.03);
+}
+
+.cancel-button {
+  background-color: red;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: red;
+  transform: scale(1.03);
+}
+
+/* Styles for searchable user input */
+.searchable-user-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.searchable-user-input {
+  padding: 12px 16px 12px 42px;
+  border-radius: 8px;
+  border: 1.5px solid #e6e6e6;
+  outline: none;
+  font-size: 1rem;
+  width: 100%;
+  height: 48px;
+  box-sizing: border-box;
+  transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  line-height: 1.2;
+}
+
+.searchable-user-input:focus {
+  border-color: #4ECDC4; /* Example focus color */
+  box-shadow: 0 0 5px rgba(78, 205, 196, 0.3); /* Example focus shadow */
+}
+
+.search-results-dropdown {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 100;
+}
+
+.search-results-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.search-results-item:hover {
+  background-color: #f0f0f0;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 20px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ===== MODAL ===== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+  width: 400px;
+  max-width: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content h2 {
+  text-align: center;
+  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+/* Champs input/select */
+.modal-content input,
+.modal-content select {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 1rem;
+  transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+  background-color: #4ECDC4;
+  box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
+}
+
+/* Actions boutons modal */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.confirm-button,
+.cancel-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.95rem;
+  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.confirm-button {
+  background-color: #4ECDC4;
+  color: white;
+}
+
+.confirm-button:hover {
+  background-color: #4ECDC4;
+  transform: scale(1.03);
+}
+
+.cancel-button {
+  background-color: red;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: red;
+  transform: scale(1.03);
+}
