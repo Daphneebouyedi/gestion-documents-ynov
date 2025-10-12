@@ -214,3 +214,10 @@ export const getUserConventions = query({
     return await ctx.db.query("conventions").filter(q => q.eq(q.field("idCandidat"), userId)).collect();
   },
 });
+
+export const getInternshipConventionById = query({
+  args: { id: v.id("internshipConventions") },
+  handler: async (ctx, { id }) => {
+    return await ctx.db.get(id);
+  },
+});

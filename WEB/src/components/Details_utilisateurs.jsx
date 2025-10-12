@@ -78,6 +78,10 @@ const DetailsUtilisateurs = () => {
                   <span className="detail-label">Ville</span>
                   <span className="detail-value">{user.ville || 'Non spécifié'}</span>
                 </div>
+                <div className="detail-item">
+                  <span className="detail-label">Date de naissance</span>
+                  <span className="detail-value">{user.dateNaissance ? new Date(user.dateNaissance).toLocaleDateString('fr-FR') : 'Non spécifié'}</span>
+                </div>
               </div>
             </div>
 

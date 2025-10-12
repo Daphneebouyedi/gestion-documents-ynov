@@ -14,6 +14,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as _internal from "../_internal.js";
+import type * as actionLogger from "../actionLogger.js";
 import type * as alerts from "../alerts.js";
 import type * as attestations from "../attestations.js";
 import type * as auth from "../auth.js";
@@ -38,6 +39,7 @@ import type * as user_actions from "../user_actions.js";
  */
 declare const fullApi: ApiFromModules<{
   _internal: typeof _internal;
+  actionLogger: typeof actionLogger;
   alerts: typeof alerts;
   attestations: typeof attestations;
   auth: typeof auth;

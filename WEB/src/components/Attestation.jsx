@@ -416,6 +416,7 @@ const AttestationForm = () => {
                   value={formData.fraisPreinscription}
                   onChange={handleChange}
                   placeholder="Ex: 500"
+                  min="0"
                   required
                 />
               </div>
@@ -427,6 +428,7 @@ const AttestationForm = () => {
                   value={formData.fraisScolarite}
                   onChange={handleChange}
                   placeholder="Ex: 8000"
+                  min="0"
                   required
                 />
               </div>
@@ -438,6 +440,7 @@ const AttestationForm = () => {
                   value={formData.totalPaye}
                   onChange={handleChange}
                   placeholder="Ex: 8500"
+                  min="0"
                   required
                 />
               </div>

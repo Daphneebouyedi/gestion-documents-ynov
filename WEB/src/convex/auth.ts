@@ -135,6 +135,7 @@ export const updateUserProfile = mutation({
     address: v.string(),
     country: v.string(),
     ville: v.string(),
+    dateNaissance: v.optional(v.string()),
     photoUrl: v.optional(v.string()),
     profileComplete: v.boolean(),
   },
