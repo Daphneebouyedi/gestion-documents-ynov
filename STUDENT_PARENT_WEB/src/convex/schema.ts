@@ -236,7 +236,7 @@ export default defineSchema({
   demandes: defineTable({
     type: v.string(), // "Bulletin de notes", "Attestation d'inscription", etc.
     userId: v.id("users"),
-    submittedAt: v.number(),
+    submittedAt: v.optional(v.number()),
     status: v.string(), // "En attente", "En cours", "Traitée", "Rejetée"
     attachmentId: v.optional(v.id("_storage")),
     title: v.optional(v.string()),
