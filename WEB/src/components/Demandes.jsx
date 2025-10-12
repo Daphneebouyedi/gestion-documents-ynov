@@ -22,10 +22,10 @@ const Demandes = () => {
         id: `conv-${conv._id}`,
         date: new Date(conv.createdAt).toLocaleString('fr-FR'),
         personne: conv.userName || "Utilisateur inconnu",
-        message: `${conv.userName} demande une convention de stage pour ${conv.entrepriseNom}.`,
-        type: "Convention de stage",
+        message: `${conv.userName || "Utilisateur inconnu"} demande une ${conv.type || "convention de stage"}.`,
+        type: conv.type || "Convention de stage",
         lu: false,
-        processingStatus: conv.status === "Pending" ? "en cours" : conv.status.toLowerCase(),
+        processingStatus: (conv.status === "Pending" || conv.status === "En attente") ? "en cours" : conv.status.toLowerCase(),
         data: conv,
       }));
 
@@ -33,10 +33,10 @@ const Demandes = () => {
         id: `att-${att._id}`,
         date: new Date(att.createdAt).toLocaleString('fr-FR'),
         personne: att.userName || "Utilisateur inconnu",
-        message: `${att.userName} demande une attestation de frais de scolarité.`,
-        type: "Attestation de frais de scolarité",
+        message: `${att.userName || "Utilisateur inconnu"} demande une ${att.type || "attestation"}.`,
+        type: att.type || "Attestation",
         lu: false,
-        processingStatus: att.status === "Pending" ? "en cours" : att.status.toLowerCase(),
+        processingStatus: (att.status === "Pending" || att.status === "En attente") ? "en cours" : att.status.toLowerCase(),
         data: att,
       }));
 
