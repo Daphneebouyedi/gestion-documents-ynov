@@ -17,11 +17,12 @@ export const sendBulletinConfirmationEmail = action({
     dateEdition: v.string(),
   },
   handler: async (ctx, args) => {
-    const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+    // SendGrid API Key from environment variable
+    const SENDGRID_API_KEY = process.env.SENGDRID;
     
     if (!SENDGRID_API_KEY) {
-      console.error("SENDGRID_API_KEY not configured");
-      throw new Error("Email service not configured");
+      console.error("SENGDRID environment variable not configured");
+      throw new Error("Email service not configured. Please set SENGDRID in Convex environment variables.");
     }
 
     const emailContent = `
