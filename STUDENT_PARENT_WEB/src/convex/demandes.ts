@@ -38,7 +38,6 @@ export const addDemande = mutation({
     status: v.string(),
     attachmentId: v.optional(v.id("_storage")),
     title: v.optional(v.string()),
-    // Champs pour toutes les demandes
     userEmail: v.optional(v.string()),
     userName: v.optional(v.string()),
     nom: v.optional(v.string()),
@@ -46,27 +45,15 @@ export const addDemande = mutation({
     dateNaissance: v.optional(v.string()),
     promotion: v.optional(v.string()),
     specialite: v.optional(v.string()),
-    // Champs spécifiques selon le type
     anneeScolaire: v.optional(v.string()),
     date: v.optional(v.string()),
-    // Convention de stage
-    entreprise: v.optional(v.string()),
-    poste: v.optional(v.string()),
-    adresseEntreprise: v.optional(v.string()),
-    dateDebut: v.optional(v.string()),
-    dateFin: v.optional(v.string()),
-    duree: v.optional(v.string()),
-    // Autres
-    details: v.optional(v.any()),
   },
   handler: async (ctx, args) => {
-    const now = Date.now();
-    const demandeData = {
+    const dataToInsert = {
       ...args,
-      submittedAt: args.submittedAt || now,
-      createdAt: now,
+      submittedAt: args.submittedAt || Date.now(),
     };
-    const demandeId = await ctx.db.insert("demandes", demandeData);
+    const demandeId = await ctx.db.insert("demandes", dataToInsert);
     return demandeId;
   },
 });
@@ -78,13 +65,6 @@ export const updateDemande = mutation({
   },
   handler: async (ctx, { id, attachmentId }) => {
     await ctx.db.patch(id, { attachmentId });
-  },
-});
-
-export const deleteDemande = mutation({
-  args: { id: v.id("demandes") },
-  handler: async (ctx, { id }) => {
-    await ctx.db.delete(id);
   },
 });
 

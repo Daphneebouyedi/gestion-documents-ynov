@@ -7,8 +7,8 @@ export default defineSchema({
     password: v.string(), // In a real app, store hashed passwords!
     firstName: v.optional(v.string()),
     lastName: v.optional(v.string()),
-    dateOfBirth: v.optional(v.string()), // Date de naissance format YYYY-MM-DD (legacy)
-    dateNaissance: v.optional(v.string()), // Date de naissance format YYYY-MM-DD (new)
+    dateNaissance: v.optional(v.string()),
+    dateOfBirth: v.optional(v.string()),
     role: v.optional(v.string()),
     promotion: v.optional(v.string()),
     specialite: v.optional(v.string()),
@@ -44,8 +44,6 @@ export default defineSchema({
     docType: v.string(), // e.g., "Certificat", "Bulletin"
     condition: v.string(), // e.g., "Traité", "En cours"
     extension: v.string(), // e.g., "PDF"
-    promotion: v.optional(v.string()), // e.g., "Bachelor 1", "Mastère 2"
-    specialite: v.optional(v.string()), // e.g., "Informatique", "Cybersécurité"
     // Optional: reason for rejection
     reason: v.optional(v.string()),
   }),
@@ -94,43 +92,35 @@ export default defineSchema({
     createdAt: v.number(),
   }),
   attestations: defineTable({
-    nom: v.optional(v.string()),
-    prenom: v.optional(v.string()),
-    dateNaissance: v.optional(v.string()),
-    promotion: v.optional(v.string()),
-    specialite: v.optional(v.string()),
-    anneeScolaire: v.optional(v.string()),
-    modalitePaiement: v.optional(v.string()),
-    fraisPreinscription: v.optional(v.number()),
-    fraisScolarite: v.optional(v.number()),
-    totalPaye: v.optional(v.number()),
-    modePaiement: v.optional(v.string()),
-    date: v.optional(v.string()),
+    nom: v.string(),
+    prenom: v.string(),
+    dateNaissance: v.string(),
+    promotion: v.string(),
+    specialite: v.string(),
+    anneeScolaire: v.string(),
+    modalitePaiement: v.string(),
+    fraisPreinscription: v.number(),
+    fraisScolarite: v.number(),
+    totalPaye: v.number(),
+    modePaiement: v.string(),
+    date: v.string(),
     userId: v.optional(v.id("users")),
-    createdAt: v.optional(v.number()),
-    email: v.optional(v.string()),
-    userName: v.optional(v.string()),
-    requestType: v.optional(v.string()),
-    status: v.optional(v.string()),
-    type: v.optional(v.string()), // Type d'attestation
-    // Bulletin
-    semestre: v.optional(v.string()),
-    // Réussite
-    moyenne: v.optional(v.string()),
-    mention: v.optional(v.string()),
+    createdAt: v.number(),
+    email: v.string(),
+    userName: v.string(),
+    requestType: v.string(),
+    status: v.string(),
   }),
   actionLogs: defineTable({
     userId: v.id("users"),
     userEmail: v.optional(v.string()),
     userName: v.optional(v.string()),
     action: v.string(),
-    actionType: v.optional(v.string()), // "login", "profile_update", "document_request", "document_delete", etc.
+    actionType: v.optional(v.string()),
+    description: v.optional(v.string()),
     details: v.optional(v.any()),
-    ipAddress: v.optional(v.string()),
-    userAgent: v.optional(v.string()),
     timestamp: v.number(),
-  })
-    .index("by_user", ["userId"])
+  }).index("by_userId", ["userId"])
     .index("by_timestamp", ["timestamp"]),
   conventions: defineTable({
     // État civil du candidat
@@ -241,13 +231,12 @@ export default defineSchema({
     createdAt: v.number(),
   }),
   demandes: defineTable({
-    type: v.string(), // "Bulletin de notes", "Attestation d'inscription", etc.
+    type: v.string(), // "attestation", "convention_stage", "convention_etude", "Bulletin de notes"
     userId: v.id("users"),
-    submittedAt: v.optional(v.number()),
-    status: v.string(), // "En attente", "En cours", "Traitée", "Rejetée"
+    submittedAt: v.number(),
+    status: v.string(), // "pending", "processed", "rejected", "En attente"
     attachmentId: v.optional(v.id("_storage")),
     title: v.optional(v.string()),
-    // Informations utilisateur
     userEmail: v.optional(v.string()),
     userName: v.optional(v.string()),
     nom: v.optional(v.string()),
@@ -255,22 +244,8 @@ export default defineSchema({
     dateNaissance: v.optional(v.string()),
     promotion: v.optional(v.string()),
     specialite: v.optional(v.string()),
-    // Champs communs
     anneeScolaire: v.optional(v.string()),
     date: v.optional(v.string()),
-    // Convention de stage
-    entreprise: v.optional(v.string()),
-    poste: v.optional(v.string()),
-    adresseEntreprise: v.optional(v.string()),
-    dateDebut: v.optional(v.string()),
-    dateFin: v.optional(v.string()),
-    duree: v.optional(v.string()),
-    // Attestation de réussite
-    moyenne: v.optional(v.string()),
-    mention: v.optional(v.string()),
-    // Autres champs dynamiques
-    details: v.optional(v.any()),
-    createdAt: v.optional(v.number()),
   }),
   alerts: defineTable({
     userId: v.id("users"),
