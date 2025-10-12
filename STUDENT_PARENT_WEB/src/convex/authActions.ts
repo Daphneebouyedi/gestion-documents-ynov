@@ -374,3 +374,42 @@ export const getUserByToken = action({
     }
   },
 });
+
+export const getUserProfile = action({
+  args: {
+    authToken: v.string(),
+  },
+  handler: async (ctx, { authToken }) => {
+    if (!JWT_SECRET) {
+      throw new Error("JWT_SECRET is not set");
+    }
+
+    let userId: string;
+    try {
+      const decoded = jwt.verify(authToken, JWT_SECRET) as { userId: string };
+      userId = decoded.userId;
+    } catch (error) {
+      throw new Error("Invalid or expired authentication token");
+    }
+
+    // Fetch user details from the 'users' table
+    const user = await ctx.runQuery(api.auth.getUser, { userId: userId as Id<"users"> });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Return relevant user details (excluding sensitive info like hashed password)
+    return {
+      _id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+      promotion: user.promotion,
+      specialite: user.specialite,
+      dateOfBirth: user.dateOfBirth,
+      dateNaissance: user.dateNaissance,
+    };
+  },
+});
