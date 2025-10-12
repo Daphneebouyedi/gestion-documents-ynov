@@ -22,6 +22,7 @@ import type * as authActions from "../authActions.js";
 import type * as conventions from "../conventions.js";
 import type * as demandes from "../demandes.js";
 import type * as documents from "../documents.js";
+import type * as emailService from "../emailService.js";
 import type * as http from "../http.js";
 import type * as internal_ from "../internal.js";
 import type * as internal_auth from "../internal_auth.js";
@@ -50,6 +51,7 @@ declare const fullApi: ApiFromModules<{
   conventions: typeof conventions;
   demandes: typeof demandes;
   documents: typeof documents;
+  emailService: typeof emailService;
   http: typeof http;
   internal: typeof internal_;
   internal_auth: typeof internal_auth;

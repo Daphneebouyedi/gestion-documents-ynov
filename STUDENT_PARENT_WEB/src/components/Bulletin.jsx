@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Ynov from "../img/Ynov.png";
 import "./Attestation.css";
-import { generateBulletinPDF } from '../utils/modernPdfGenerator';
 import { useMutation, useAction, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import DashboardLayout from './DashboardLayout';
@@ -30,7 +29,6 @@ const Bulletin = () => {
     promotion: "",
     specialite: "",
     anneeScolaire: "",
-    semestre: "",
     date: new Date().toISOString().substring(0, 10),
   });
 
@@ -72,7 +70,7 @@ const Bulletin = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const generatePdf = () => { generateBulletinPDF(formData, Ynov); };
+  const sendBulletinEmail = useAction(api.emailService.sendBulletinConfirmationEmail);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,6 +81,7 @@ const Bulletin = () => {
     }
 
     try {
+      // Save bulletin request
       await requestAttestation({
         nom: formData.nom,
         prenom: formData.prenom,
@@ -90,7 +89,6 @@ const Bulletin = () => {
         promotion: formData.promotion,
         specialite: formData.specialite,
         anneeScolaire: formData.anneeScolaire,
-        semestre: formData.semestre,
         type: 'Bulletin de notes',
         date: formData.date,
         userId: userIdFromToken,
@@ -100,8 +98,24 @@ const Bulletin = () => {
         status: 'En attente',
       });
       
-      alert("Demande de bulletin envoyée avec succès!");
-      generatePdf();
+      // Send confirmation email
+      try {
+        await sendBulletinEmail({
+          toEmail: user?.email || '',
+          toName: `${formData.prenom} ${formData.nom}`,
+          nom: formData.nom,
+          prenom: formData.prenom,
+          promotion: formData.promotion,
+          specialite: formData.specialite,
+          anneeScolaire: formData.anneeScolaire,
+          dateEdition: new Date().toLocaleDateString('fr-FR'),
+        });
+      } catch (emailError) {
+        console.error("Email sending failed:", emailError);
+        // Continue even if email fails
+      }
+      
+      alert("Demande de bulletin envoyée avec succès! Un email de confirmation vous a été envoyé.");
       navigate("/demandes");
     } catch (err) {
       console.error("Erreur persistance bulletin:", err);
@@ -198,25 +212,7 @@ const Bulletin = () => {
                   required
                 />
               </div>
-              <div className="ce-form-group">
-                <label>Semestre :</label>
-                <select
-                  name="semestre"
-                  value={formData.semestre}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">-- Sélectionner --</option>
-                  <option value="S1">Semestre 1</option>
-                  <option value="S2">Semestre 2</option>
-                  <option value="S3">Semestre 3</option>
-                  <option value="S4">Semestre 4</option>
-                  <option value="S5">Semestre 5</option>
-                  <option value="S6">Semestre 6</option>
-                </select>
-              </div>
-            </div>
-          </fieldset>
+              </div></fieldset>
 
           <fieldset>
             <legend>Informations de l'Établissement</legend>
