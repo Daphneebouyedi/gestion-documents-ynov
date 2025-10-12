@@ -18,8 +18,8 @@ const DetailsDemande = () => {
   const attestation = useQuery(api.attestations.getAttestationById, isAttestation ? { id: realId } : "skip");
 
   const data = isConvention ? convention : attestation;
-  const type = isConvention ? 'Convention de stage' : 'Attestation de frais de scolarité';
-  const status = data ? (data.status === 'Generated' ? 'envoyé' : data.status || 'envoyé') : '';
+  const type = data?.type || (isConvention ? 'Convention de stage' : 'Attestation');
+  const status = data ? (data.status === 'Generated' || data.status === 'En attente' ? 'envoyé' : data.status || 'envoyé') : '';
   const dateEdition = data ? new Date(data.createdAt).toLocaleString('fr-FR') : '';
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Ynov from "../img/Ynov.png";
 import "./Attestation.css";
-import jsPDF from 'jspdf';
+import { generateBulletinPDF } from '../utils/modernPdfGenerator';
 import { useMutation, useAction, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import DashboardLayout from './DashboardLayout';
@@ -72,124 +72,7 @@ const Bulletin = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const generatePdf = () => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const margin = 20;
-    let yPos = 20;
-    const contentWidth = pageWidth - 2 * margin;
-
-    const ynovBlue = [0, 51, 102];
-    const ynovTeal = [78, 205, 196];
-
-    try {
-        doc.addImage(Ynov, "PNG", margin, yPos, 20, 18);
-    } catch (e) {
-        console.warn("Erreur de chargement du logo Ynov. Poursuite sans logo.");
-    }
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(20);
-    doc.setTextColor(ynovBlue[0], ynovBlue[1], ynovBlue[2]);
-    doc.text("BULLETIN DE NOTES", pageWidth - margin, yPos + 10, { align: 'right' });
-    yPos += 30;
-
-    doc.setDrawColor(ynovTeal[0], ynovTeal[1], ynovTeal[2]);
-    doc.setLineWidth(0.8);
-    doc.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 10;
-
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.setFont("helvetica", "normal");
-
-    doc.text(`IDG - YNOV CAMPUS`, margin, yPos);
-    doc.text(`Représenté par : ${INFOS_ETABLISSEMENT.directeur}, Directeur Général`, margin, yPos + 5);
-    doc.text(`Adresse : ${INFOS_ETABLISSEMENT.adresse}`, margin, yPos + 10);
-    yPos += 20;
-
-    doc.setFontSize(12);
-    const introText = `Bulletin de notes pour l'étudiant(e) ${formData.nom} ${formData.prenom} pour le semestre ${formData.semestre} de l'année scolaire ${formData.anneeScolaire}.`;
-    const introLines = doc.splitTextToSize(introText, contentWidth);
-    doc.text(introLines, margin, yPos);
-    yPos += introLines.length * 6 + 8;
-
-    doc.setFillColor(240, 240, 240);
-    doc.rect(margin, yPos - 2, contentWidth, 38, 'F');
-    doc.setFontSize(11);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(ynovBlue[0], ynovBlue[1], ynovBlue[2]);
-    doc.text("INFORMATIONS DE L'ÉTUDIANT", margin + 2, yPos + 3);
-
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(0, 0, 0);
-    let col1 = margin + 5;
-    let col2 = margin + contentWidth / 2 + 5;
-    let currentLineY = yPos + 10;
-
-    const studentInfo = [
-        { label: "Nom et Prénom", value: `${formData.nom} ${formData.prenom}` },
-        { label: "Date de naissance", value: formData.dateNaissance.split('-').reverse().join('/') },
-        { label: "Promotion", value: formData.promotion },
-        { label: "Spécialité", value: formData.specialite },
-        { label: "Année scolaire", value: formData.anneeScolaire },
-        { label: "Semestre", value: formData.semestre },
-    ];
-
-    studentInfo.forEach((item, index) => {
-        let x = index % 2 === 0 ? col1 : col2;
-        doc.setFont("helvetica", "bold");
-        doc.text(`${item.label} : `, x, currentLineY);
-        let labelWidth = doc.getTextWidth(`${item.label} : `);
-        doc.setFont("helvetica", "normal");
-        const lines = doc.splitTextToSize(item.value || 'N/A', contentWidth/2 - labelWidth - 5);
-        doc.text(lines, x + labelWidth, currentLineY);
-        if (index % 2 !== 0) {
-            currentLineY += 8;
-        }
-    });
-
-    yPos = currentLineY + 10;
-
-    doc.setFontSize(11);
-    doc.text(`Ce bulletin est délivré à l'intéressé(e), à sa demande, pour servir et valoir ce que de droit.`, margin, yPos, {
-        maxWidth: contentWidth
-    });
-    yPos += 10;
-
-    if (yPos > doc.internal.pageSize.getHeight() - 80) {
-        doc.addPage();
-        yPos = margin;
-    }
-
-    doc.setFont("helvetica", "bold");
-    doc.text("MENTIONS LÉGALES :", margin, yPos);
-    yPos += 5;
-    doc.setFont("helvetica", "normal");
-    const legalText = `IDG Maroc- YNOV CAMPUS, ${INFOS_ETABLISSEMENT.details_legaux}`;
-    const legalLines = doc.splitTextToSize(legalText, contentWidth);
-    doc.text(legalLines, margin, yPos);
-    yPos += legalLines.length * 4.5 + 5;
-
-    const conclusion = "Ce bulletin est délivré à l'intéressé(e), à sa demande, pour servir et valoir ce que de droit.";
-    doc.setFont("helvetica", "italic");
-    doc.setFontSize(11);
-    doc.text(conclusion, margin, yPos);
-    yPos += 15;
-
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
-    doc.text(`Fait à Casablanca, le ${formData.date.split('-').reverse().join('/')}`, pageWidth - margin, yPos, { align: 'right' });
-    yPos += 20;
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.text(INFOS_ETABLISSEMENT.directeur, pageWidth - margin, yPos, { align: 'right' });
-    doc.setFontSize(10);
-    doc.text("Directeur Général", pageWidth - margin, yPos + 5, { align: 'right' });
-
-    doc.save(`Bulletin_${formData.nom}_${formData.prenom}_${formData.semestre}.pdf`);
-  };
+  const generatePdf = () => { generateBulletinPDF(formData, Ynov); };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
