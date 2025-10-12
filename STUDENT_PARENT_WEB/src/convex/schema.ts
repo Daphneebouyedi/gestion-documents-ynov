@@ -44,6 +44,8 @@ export default defineSchema({
     docType: v.string(), // e.g., "Certificat", "Bulletin"
     condition: v.string(), // e.g., "Traité", "En cours"
     extension: v.string(), // e.g., "PDF"
+    promotion: v.optional(v.string()), // e.g., "Bachelor 1", "Mastère 2"
+    specialite: v.optional(v.string()), // e.g., "Informatique", "Cybersécurité"
     // Optional: reason for rejection
     reason: v.optional(v.string()),
   }),

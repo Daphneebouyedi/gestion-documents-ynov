@@ -18,6 +18,8 @@ export const addDocument = mutation({
     statusType: v.string(),
     condition: v.string(),
     extension: v.string(),
+    promotion: v.optional(v.string()),
+    specialite: v.optional(v.string()),
     reason: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -44,6 +46,8 @@ export const addDocument = mutation({
       statusType: args.statusType,
       condition: args.condition,
       extension: args.extension,
+      promotion: args.promotion,
+      specialite: args.specialite,
       reason: args.reason,
     });
 
