@@ -27,6 +27,7 @@ import type * as internal_ from "../internal.js";
 import type * as internal_auth from "../internal_auth.js";
 import type * as myFunctions from "../myFunctions.js";
 import type * as requests from "../requests.js";
+import type * as seedHistoricalData from "../seedHistoricalData.js";
 import type * as user_actions from "../user_actions.js";
 
 /**
@@ -52,6 +53,7 @@ declare const fullApi: ApiFromModules<{
   internal_auth: typeof internal_auth;
   myFunctions: typeof myFunctions;
   requests: typeof requests;
+  seedHistoricalData: typeof seedHistoricalData;
   user_actions: typeof user_actions;
 }>;
 export declare const api: FilterApi<

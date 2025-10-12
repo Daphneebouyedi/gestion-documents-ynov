@@ -1,10 +1,30 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useActionLogger, ACTION_TYPES } from '../hooks/useActionLogger';
 import Sidebar from './Sidebar';
 
 const DashboardLayout = ({ children, pageTitle, pageDescription }) => {
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const logAction = useActionLogger();
+  
+  const handleLogout = async () => {
+    try {
+      await logAction(
+        ACTION_TYPES.LOGOUT,
+        "Déconnexion",
+        { timestamp: new Date().toISOString() }
+      );
+    } catch (error) {
+      console.error("Failed to log logout:", error);
+    }
+    
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userName");
+    navigate('/login');
+  };
 
   return (
     <div className="dashboard" style={{ display: 'flex', minHeight: '100vh', background: '#F6F8FA' }}>
@@ -33,7 +53,7 @@ const DashboardLayout = ({ children, pageTitle, pageDescription }) => {
             <span>Mon Profil</span>
           </div>
           <div className="user-menu-separator"></div>
-          <div className="user-menu-item" style={{ color: '#e53935' }} onClick={() => { setShowUserMenu(false); /* déconnexion ici */ }}>
+          <div className="user-menu-item" style={{ color: '#e53935' }} onClick={handleLogout}>
             <img src="/bouton-dalimentation.png" alt="Déconnexion" />
             <span>Se déconnecter</span>
           </div>
@@ -47,7 +67,7 @@ const DashboardLayout = ({ children, pageTitle, pageDescription }) => {
             <span>Mon Profil</span>
           </div>
           <div className="user-menu-separator"></div>
-          <div className="user-menu-item" style={{ color: '#e53935' }} onClick={() => { setShowUserMenu(false); /* déconnexion ici */ }}>
+          <div className="user-menu-item" style={{ color: '#e53935' }} onClick={handleLogout}>
             <img src="/bouton-dalimentation.png" alt="Déconnexion" />
             <span>Se déconnecter</span>
           </div>

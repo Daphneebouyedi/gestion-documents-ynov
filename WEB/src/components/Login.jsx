@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAction } from 'convex/react';
 import { api } from '../convex/_generated/api';
+import { useActionLogger, ACTION_TYPES } from '../hooks/useActionLogger';
 import Ynov from '../img/Ynov.png';
 import './Login.css';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -24,6 +25,8 @@ const Login = () => {
   const [pwTouched, setPwTouched] = useState(false);
   const [recaptchaValue, setRecaptchaValue] = useState(null);
 
+  // Initialize action logger
+  const logAction = useActionLogger();
 
   // Initialize Convex login mutation only
   const startLoginWithOtp = useAction(api.authActions.startLoginWithOtp);
@@ -85,9 +88,31 @@ const Login = () => {
       return;
     }
     try {
-      const { token, userId } = await completeLoginWithOtp({ challenge, code: otpCode });
+      const { token, userId, user } = await completeLoginWithOtp({ challenge, code: otpCode });
       localStorage.setItem("jwtToken", token);
       localStorage.setItem("userId", userId);
+      localStorage.setItem("userEmail", formData.email);
+      if (user) {
+        localStorage.setItem("userName", `${user.firstName || ''} ${user.lastName || ''}`.trim());
+      }
+      
+      // Log the login action
+      setTimeout(async () => {
+        try {
+          await logAction(
+            ACTION_TYPES.LOGIN,
+            "Connexion réussie",
+            { 
+              email: formData.email,
+              timestamp: new Date().toISOString(),
+              method: "OTP"
+            }
+          );
+        } catch (logError) {
+          console.error("Failed to log login action:", logError);
+        }
+      }, 500);
+      
       navigate('/dashboard');
     } catch (err) {
       console.error('OTP verification failed:', err);
