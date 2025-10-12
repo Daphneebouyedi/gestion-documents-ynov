@@ -60,7 +60,9 @@ const Bulletin = () => {
         ...prev,
         nom: user.lastName || '',
         prenom: user.firstName || '',
-        dateNaissance: user.dateOfBirth || '',
+        dateNaissance: user.dateNaissance || user.dateOfBirth || '', // Support both field names
+        promotion: user.promotion || '',
+        specialite: user.specialite || '',
       }));
     }
   }, [user]);

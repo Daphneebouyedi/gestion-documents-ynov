@@ -61,7 +61,9 @@ const AttestationReussite = () => {
         ...prev,
         nom: user.lastName || '',
         prenom: user.firstName || '',
-        dateNaissance: user.dateOfBirth || '',
+        dateNaissance: user.dateNaissance || user.dateOfBirth || '',
+        promotion: user.promotion || '',
+        specialite: user.specialite || '',
       }));
     }
   }, [user]);

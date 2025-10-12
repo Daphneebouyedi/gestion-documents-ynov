@@ -7,7 +7,8 @@ export default defineSchema({
     password: v.string(), // In a real app, store hashed passwords!
     firstName: v.optional(v.string()),
     lastName: v.optional(v.string()),
-    dateOfBirth: v.optional(v.string()), // Date de naissance format YYYY-MM-DD
+    dateOfBirth: v.optional(v.string()), // Date de naissance format YYYY-MM-DD (legacy)
+    dateNaissance: v.optional(v.string()), // Date de naissance format YYYY-MM-DD (new)
     role: v.optional(v.string()),
     promotion: v.optional(v.string()),
     specialite: v.optional(v.string()),
