@@ -256,10 +256,7 @@ body {
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
   grid-template-areas:
-    "stats stats alerts alerts"
     "summary summary summary summary"
-    "charts charts charts charts"
-    "alerts-full alerts-full alerts-full alerts-full"
     "logs logs logs logs";
 }
 
@@ -267,10 +264,7 @@ body {
   .dashboard-main-content-grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas:
-      "stats alerts"
       "summary summary"
-      "charts charts"
-      "alerts-full alerts-full"
       "logs logs";
   }
 }
@@ -279,11 +273,7 @@ body {
   .dashboard-main-content-grid {
     grid-template-columns: 1fr;
     grid-template-areas:
-      "stats"
-      "alerts"
       "summary"
-      "charts"
-      "alerts-full"
       "logs";
   }
 }
@@ -345,113 +335,9 @@ body {
   color: var(--text-dark);
 }
 
-/* --- STATS & ALERTS CARDS --- */
-.stats-card {
-  grid-area: stats;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-}
 
-.alerts-card {
-  grid-area: alerts-full;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-}
 
-.alerts-card h2 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 1.2em;
-  color: var(--text-dark);
-}
 
-.alerts-table-wrapper {
-  overflow-x: auto;
-}
-
-.alerts-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-.alerts-table th, .alerts-table td {
-  padding: 10px 15px;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-}
-
-.alerts-table th {
-  background-color: #f8f8f8;
-  font-weight: 600;
-  color: var(--text-dark);
-}
-
-.alert-badge {
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 0.85em;
-  font-weight: 600;
-  color: white;
-}
-
-.alert-badge.red {
-  background-color: #ff4d4d;
-}
-
-.alert-badge.orange {
-  background-color: #ffa500;
-}
-
-.view-folder-button {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.view-folder-button:hover {
-  background-color: #1e9e82;
-}
-
-/* --- CHARTS SECTION --- */
-.charts-section {
-  grid-area: charts;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-
-@media (max-width: 1200px) {
-  .charts-section {
-    grid-template-columns: 1fr;
-  }
-}
-
-.chart-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-}
-
-.chart-card h3 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 1.2em;
-  color: var(--text-dark);
-}
 
 /* --- LOGS CARD --- */
 .logs-card {
