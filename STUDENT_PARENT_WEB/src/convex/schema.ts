@@ -234,12 +234,36 @@ export default defineSchema({
     createdAt: v.number(),
   }),
   demandes: defineTable({
-    type: v.string(), // "attestation", "convention_stage", "convention_etude"
+    type: v.string(), // "Bulletin de notes", "Attestation d'inscription", etc.
     userId: v.id("users"),
     submittedAt: v.number(),
-    status: v.string(), // "pending", "processed", "rejected"
+    status: v.string(), // "En attente", "En cours", "Traitée", "Rejetée"
     attachmentId: v.optional(v.id("_storage")),
     title: v.optional(v.string()),
+    // Informations utilisateur
+    userEmail: v.optional(v.string()),
+    userName: v.optional(v.string()),
+    nom: v.optional(v.string()),
+    prenom: v.optional(v.string()),
+    dateNaissance: v.optional(v.string()),
+    promotion: v.optional(v.string()),
+    specialite: v.optional(v.string()),
+    // Champs communs
+    anneeScolaire: v.optional(v.string()),
+    date: v.optional(v.string()),
+    // Convention de stage
+    entreprise: v.optional(v.string()),
+    poste: v.optional(v.string()),
+    adresseEntreprise: v.optional(v.string()),
+    dateDebut: v.optional(v.string()),
+    dateFin: v.optional(v.string()),
+    duree: v.optional(v.string()),
+    // Attestation de réussite
+    moyenne: v.optional(v.string()),
+    mention: v.optional(v.string()),
+    // Autres champs dynamiques
+    details: v.optional(v.any()),
+    createdAt: v.optional(v.number()),
   }),
   alerts: defineTable({
     userId: v.id("users"),
