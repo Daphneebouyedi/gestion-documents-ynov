@@ -97,7 +97,7 @@ export const sendBulletinConfirmationEmail = action({
         },
       ],
       from: {
-        email: "noreply@ynov-campus.ma",
+        email: "daphnee.bouyedi641@gmail.com",
         name: "Ynov Campus Maroc",
       },
       content: [
