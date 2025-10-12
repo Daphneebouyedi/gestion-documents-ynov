@@ -354,14 +354,21 @@ const DocumentsDispo = () => {
                     onClick={() => setShowAddModal(false)}
                     style={{
                       flex: 1,
-                      padding: '12px 20px',
+                      padding: '10px 15px',
                       borderRadius: 8,
-                      border: '1.5px solid #e6e6e6',
-                      background: 'white',
-                      color: '#666',
-                      fontSize: 16,
+                      border: 'none',
+                      background: 'red',
+                      color: 'white',
+                      fontSize: '0.95rem',
                       fontWeight: 'bold',
                       cursor: 'pointer',
+                      transition: 'all 0.2s ease-in-out',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.03)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'scale(1)';
                     }}
                   >
                     Annuler
@@ -370,15 +377,21 @@ const DocumentsDispo = () => {
                     onClick={handleAddDocument}
                     style={{
                       flex: 1,
-                      padding: '12px 20px',
+                      padding: '10px 15px',
                       borderRadius: 8,
                       border: 'none',
-                      background: 'linear-gradient(135deg, #4ECDC4 0%, #003366 100%)',
+                      background: '#4ECDC4',
                       color: 'white',
-                      fontSize: 16,
+                      fontSize: '0.95rem',
                       fontWeight: 'bold',
                       cursor: 'pointer',
-                      boxShadow: '0 4px 12px rgba(78, 205, 196, 0.3)',
+                      transition: 'all 0.2s ease-in-out',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.03)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'scale(1)';
                     }}
                   >
                     Ajouter
