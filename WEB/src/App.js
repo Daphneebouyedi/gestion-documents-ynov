@@ -9,7 +9,6 @@ import ReponseMail from './components/ReponseMail';
 import Dashboard from "./components/Dashboard";
 import NotificationsAlertes from "./components/Notifications-alertes"; 
 import Alertes from "./components/Alertes";
-import AlertsAndPendingDocs from "./components/AlertsAndPendingDocs";
 import DocumentsDispo from "./components/Documents_Dispo";
 import Recherche from "./components/Recherche";
 import DocumentsTransferts from "./components/Documents_Transferts";
@@ -55,7 +54,6 @@ function App() {
           <Route path="/notifications" element={<NotificationsAlertes />} />
           <Route path="/notifications/alertes" element={<Alertes />} />   
           <Route path="/notifications/demandes" element={<Demandes />} />
-          <Route path="/alerts" element={<AlertsAndPendingDocs />} />
 
           {/* Demandes */}
           <Route path="/demandes" element={<Demandes />} />
