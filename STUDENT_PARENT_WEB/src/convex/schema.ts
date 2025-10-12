@@ -92,39 +92,44 @@ export default defineSchema({
     createdAt: v.number(),
   }),
   attestations: defineTable({
-    nom: v.string(),
-    prenom: v.string(),
-    dateNaissance: v.string(),
-    promotion: v.string(),
-    specialite: v.string(),
-    anneeScolaire: v.string(),
-    modalitePaiement: v.string(),
-    fraisPreinscription: v.number(),
-    fraisScolarite: v.number(),
-    totalPaye: v.number(),
-    modePaiement: v.string(),
-    date: v.string(),
+    nom: v.optional(v.string()),
+    prenom: v.optional(v.string()),
+    dateNaissance: v.optional(v.string()),
+    promotion: v.optional(v.string()),
+    specialite: v.optional(v.string()),
+    anneeScolaire: v.optional(v.string()),
+    modalitePaiement: v.optional(v.string()),
+    fraisPreinscription: v.optional(v.number()),
+    fraisScolarite: v.optional(v.number()),
+    totalPaye: v.optional(v.number()),
+    modePaiement: v.optional(v.string()),
+    date: v.optional(v.string()),
     userId: v.optional(v.id("users")),
-    createdAt: v.number(),
-    email: v.string(),
-    userName: v.string(),
-    requestType: v.string(),
-    status: v.string(),
+    createdAt: v.optional(v.number()),
+    email: v.optional(v.string()),
+    userName: v.optional(v.string()),
+    requestType: v.optional(v.string()),
+    status: v.optional(v.string()),
+    type: v.optional(v.string()), // Type d'attestation
+    // Bulletin
+    semestre: v.optional(v.string()),
+    // Réussite
+    moyenne: v.optional(v.string()),
+    mention: v.optional(v.string()),
   }),
   actionLogs: defineTable({
     userId: v.id("users"),
-    userEmail: v.string(),
+    userEmail: v.optional(v.string()),
     userName: v.optional(v.string()),
     action: v.string(),
-    actionType: v.string(), // "login", "profile_update", "document_request", "document_delete", etc.
+    actionType: v.optional(v.string()), // "login", "profile_update", "document_request", "document_delete", etc.
     details: v.optional(v.any()),
     ipAddress: v.optional(v.string()),
     userAgent: v.optional(v.string()),
     timestamp: v.number(),
   })
     .index("by_user", ["userId"])
-    .index("by_timestamp", ["timestamp"])
-    .index("by_action_type", ["actionType"]),
+    .index("by_timestamp", ["timestamp"]),
   conventions: defineTable({
     // État civil du candidat
     civiliteCandidat: v.string(),
