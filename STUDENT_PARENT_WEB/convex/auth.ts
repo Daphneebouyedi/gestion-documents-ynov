@@ -40,6 +40,11 @@ export const getUserProfile = query({
       role: user.role,
       promotion: user.promotion,
       specialite: user.specialite,
+      dateNaissance: user.dateNaissance,
+      phone: user.phone,
+      address: user.address,
+      country: user.country,
+      ville: user.ville,
       // Add other non-sensitive fields you want to expose to the client
     };
   },

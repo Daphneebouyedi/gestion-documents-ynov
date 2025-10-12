@@ -44,3 +44,15 @@ export const getUserAlerts = query({
     return await ctx.db.query("alerts").filter(q => q.eq(q.field("userId"), userId)).collect();
   },
 });
+
+export const deleteAlert = mutation({
+  args: { id: v.id("alerts") },
+  handler: async (ctx, { id }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Non authentifié. Veuillez vous connecter.");
+    }
+
+    await ctx.db.delete(id);
+  },
+});

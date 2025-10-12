@@ -3,6 +3,9 @@ import { api } from "./_generated/api";
 import { v } from "convex/values";
 import { Id } from "./_generated/dataModel";
 import bcrypt from "bcryptjs";
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const insertUser = mutation({
   args: {
@@ -135,6 +138,7 @@ export const updateUserProfile = mutation({
     address: v.string(),
     country: v.string(),
     ville: v.string(),
+    dateNaissance: v.optional(v.string()),
     photoUrl: v.optional(v.string()),
     profileComplete: v.boolean(),
   },
@@ -143,5 +147,48 @@ export const updateUserProfile = mutation({
     const { userId, ...rest } = args;
     await ctx.db.patch(userId, rest);
     console.log("updateUserProfile: User patched.");
+  },
+});
+
+export const getUserProfile = action({
+  args: {
+    authToken: v.string(),
+  },
+  handler: async (ctx, { authToken }) => {
+    if (!JWT_SECRET) {
+      throw new Error("JWT_SECRET is not set");
+    }
+
+    let userId: string;
+    try {
+      const decoded = jwt.verify(authToken, JWT_SECRET) as { userId: string };
+      userId = decoded.userId;
+    } catch (error) {
+      throw new Error("Invalid or expired authentication token");
+    }
+
+    // Fetch user details from the 'users' table
+    const user = await ctx.runQuery(api.auth.getUser, { userId });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Return relevant user details (excluding sensitive info like hashed password)
+    return {
+      _id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+      promotion: user.promotion,
+      specialite: user.specialite,
+      dateNaissance: user.dateNaissance,
+      phone: user.phone,
+      address: user.address,
+      country: user.country,
+      ville: user.ville,
+      // Add other non-sensitive fields you want to expose to the client
+    };
   },
 });

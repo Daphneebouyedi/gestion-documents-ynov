@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 import DashboardLayout from "./DashboardLayout";
 import "./Dashboard.css";
@@ -13,41 +13,53 @@ const Demandes = () => {
   const attestations = useQuery(api.attestations.listAttestations);
   const mobileDemandes = useQuery(api.demandes.listDemandes);
 
+  // Mutations
+  const deleteInternshipConvention = useMutation(api.conventions.deleteInternshipConvention);
+  const deleteAttestation = useMutation(api.attestations.deleteAttestation);
+  const deleteDemande = useMutation(api.demandes.deleteDemande);
+
   // Combine and format the data
   const [demandes, setDemandes] = useState([]);
+
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case "envoyé":
+        return { backgroundColor: 'blue', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '14px' };
+      case "en cours de traitement":
+        return { backgroundColor: 'yellow', color: 'black', padding: '4px 8px', borderRadius: '4px', fontSize: '14px' };
+      case "document reçu":
+        return { backgroundColor: 'green', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '14px' };
+      default:
+        return { backgroundColor: 'gray', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '14px' };
+    }
+  };
 
   useEffect(() => {
     if (conventions && attestations && mobileDemandes) {
       const formattedConventions = conventions.map((conv, index) => ({
         id: `conv-${conv._id}`,
         date: new Date(conv.createdAt).toLocaleString('fr-FR'),
-        personne: conv.userName || "Utilisateur inconnu",
-        message: `${conv.userName} demande une convention de stage pour ${conv.entrepriseNom}.`,
-        type: "Convention de stage",
+        type: conv.type || "Convention de stage",
         lu: false,
-        processingStatus: conv.status === "Pending" ? "en cours" : conv.status.toLowerCase(),
+        processingStatus: (conv.status.toLowerCase() === "pending" || conv.status.toLowerCase() === "generated") ? "envoyé" : conv.status.toLowerCase(),
         data: conv,
       }));
 
       const formattedAttestations = attestations.map((att, index) => ({
         id: `att-${att._id}`,
         date: new Date(att.createdAt).toLocaleString('fr-FR'),
-        personne: att.userName || "Utilisateur inconnu",
-        message: `${att.userName} demande une attestation de frais de scolarité.`,
         type: "Attestation de frais de scolarité",
         lu: false,
-        processingStatus: att.status === "Pending" ? "en cours" : att.status.toLowerCase(),
+        processingStatus: (att.status.toLowerCase() === "pending" || att.status.toLowerCase() === "generated") ? "envoyé" : att.status.toLowerCase(),
         data: att,
       }));
 
       const formattedMobileDemandes = mobileDemandes.map((dem) => ({
         id: `mobile-${dem._id}`,
         date: new Date(dem.submittedAt).toLocaleString('fr-FR'),
-        personne: `${dem.userFirstName || 'Utilisateur'} ${dem.userLastName || 'inconnu'}`,
-        message: `Demande ${dem.type.replace('_', ' ')} soumise via mobile.`,
         type: dem.type.replace('_', ' ').toUpperCase(),
         lu: false,
-        processingStatus: dem.status,
+        processingStatus: (dem.status.toLowerCase() === "pending" || dem.status.toLowerCase() === "generated") ? "envoyé" : dem.status.toLowerCase(),
         data: dem,
       }));
 
@@ -63,6 +75,49 @@ const Demandes = () => {
   const [isConfirmation, setIsConfirmation] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
 
+  const [openMenuId, setOpenMenuId] = useState(null);
+
+  const handleMenuToggle = (id) => {
+    setOpenMenuId(openMenuId === id ? null : id);
+  };
+
+  const handleDetails = (id) => {
+    setOpenMenuId(null);
+    if (id.startsWith('mobile-')) {
+      navigate(`/details-demandes/${id}`);
+    } else {
+      navigate(`/details-demande/${id}`);
+    }
+  };
+
+  const handleDelete = (id) => {
+    setOpenMenuId(null);
+    setModalMessage("Voulez-vous vraiment supprimer cette demande de manière irréversible ? Cette action ne peut pas être annulée.");
+    setIsConfirmation(true);
+    setConfirmAction(() => async () => {
+      try {
+        if (id.startsWith('conv-')) {
+          const realId = id.replace('conv-', '');
+          await deleteInternshipConvention({ id: realId });
+        } else if (id.startsWith('att-')) {
+          const realId = id.replace('att-', '');
+          await deleteAttestation({ id: realId });
+        } else if (id.startsWith('mobile-')) {
+          const realId = id.replace('mobile-', '');
+          await deleteDemande({ id: realId });
+        }
+        setDemandes(prev => prev.filter(d => d.id !== id));
+        setShowModal(false);
+      } catch (error) {
+        console.error('Delete error', error);
+        setModalMessage("Erreur lors de la suppression.");
+        setIsConfirmation(false);
+        setShowModal(true);
+      }
+    });
+    setShowModal(true);
+  };
+
   const types = ["Tous", ...Array.from(new Set(demandes.map(d => d.type))).sort()];
 
   const toggleSelection = (id) => {
@@ -77,13 +132,7 @@ const Demandes = () => {
     }
   };
 
-  const handleStatusChange = (id, newStatus) => {
-    setDemandes(prevDemandes =>
-      prevDemandes.map(demand =>
-        demand.id === id ? { ...demand, processingStatus: newStatus } : demand
-      )
-    );
-  };
+
 
   const markSelected = (etat) => {
     if (selectedIds.length === 0) {
@@ -180,7 +229,7 @@ const Demandes = () => {
         </div>
         {/* Légende et actions supprimées, remplacées par icônes dans le tableau */}
         {/* Tableau demandes */}
-        <div className="notifications-table-wrapper" style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', padding: 0, marginTop: 0, overflow: 'hidden', border: '1px solid #e6e6e6' }}>
+        <div className="notifications-table-wrapper" style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', padding: 0, marginTop: 0, overflow: 'visible', border: '1px solid #e6e6e6' }}>
           <table className="notifications-table" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0 }}>
             <thead>
               <tr style={{ background: '#23c2a2', color: '#fff', fontFamily: 'Arial, sans-serif', fontWeight: 600, fontSize: 16 }}>
@@ -193,9 +242,8 @@ const Demandes = () => {
                 </th>
                 <th style={{ padding: '16px 12px', borderBottom: 'none', textAlign: 'left', minWidth: 150 }}>Statut du traitement</th>
                 <th style={{ padding: '16px 12px', borderBottom: 'none', textAlign: 'left', minWidth: 120 }}>Date/heure</th>
-                <th style={{ padding: '16px 12px', borderBottom: 'none', textAlign: 'left', minWidth: 140 }}>Personne</th>
-                <th style={{ padding: '16px 12px', borderBottom: 'none', textAlign: 'left', minWidth: 260 }}>Message</th>
-                <th style={{ padding: '16px 12px', borderTopRightRadius: 16, borderBottom: 'none', textAlign: 'left', minWidth: 120 }}>Type</th>
+                <th style={{ padding: '16px 12px', borderBottom: 'none', textAlign: 'left', minWidth: 120 }}>Type</th>
+                <th style={{ padding: '16px 12px', borderTopRightRadius: 16, borderBottom: 'none', textAlign: 'left', minWidth: 120 }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -203,9 +251,7 @@ const Demandes = () => {
                 <tr
                   key={d.id}
                   className={d.lu ? "lu" : "non-lu"}
-                  onClick={() => d.id.startsWith('mobile-') ? navigate(`/details-demandes/${d.id}`) : navigate(`/demandes/${d.id}`)}
                   style={{
-                    cursor: "pointer",
                     background: '#F6F8FA',
                     borderBottom: '1px solid #e6e6e6',
                     fontFamily: 'Arial, sans-serif',
@@ -222,27 +268,25 @@ const Demandes = () => {
                     />
                   </td>
                   <td style={{ padding: '12px 12px' }}>
-                    <select
-                      className={`processing-status-select status-${d.processingStatus.replace(/\s/g, '-')}`}
-                      value={d.processingStatus}
-                      onChange={(e) => handleStatusChange(d.id, e.target.value)}
-                      onClick={(e) => e.stopPropagation()} // Prevent row click from triggering
-                    >
-                      <option value="en cours">En cours</option>
-                      <option value="validé">Validé</option>
-                      <option value="rejeté">Rejeté</option>
-                    </select>
+                    <span style={getStatusStyle(d.processingStatus)}>{d.processingStatus}</span>
                   </td>
                   <td style={{ padding: '12px 12px', color: '#222' }}>{d.date}</td>
-                  <td style={{ padding: '12px 12px', color: '#222' }}>{d.personne}</td>
                   <td style={{ padding: '12px 12px', color: '#222', display: 'flex', alignItems: 'center', gap: 8 }}>
-                    {d.message}
+                    {d.type}
                     {/* Icône trombone si pièce jointe (exemple : type Convention ou Certificat) */}
-                    {(d.type === 'Convention' || d.type === 'Certificat' || d.type === 'Convention étude') && (
+                    {(d.type === 'Convention de stage' || d.type === 'Attestation de frais de scolarité' || d.type === 'Convention d\'étude') && (
                       <img src="/pieces-jointes.png" alt="Pièce jointe" style={{ width: 18, height: 18, marginLeft: 6, opacity: 0.7 }} />
                     )}
                   </td>
-                  <td style={{ padding: '12px 12px', color: '#222' }}>{d.type}</td>
+                  <td style={{ padding: '12px 12px', color: '#222', position: 'relative' }}>
+                    <button onClick={(e) => { e.stopPropagation(); handleMenuToggle(d.id); }} style={{ background: 'none', border: 'none', fontSize: 18, cursor: 'pointer' }}>⋮</button>
+                    {openMenuId === d.id && (
+                      <div style={{ position: 'absolute', top: '100%', right: 0, background: '#fff', border: '1px solid #e6e6e6', borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.1)', zIndex: 10, minWidth: 120 }}>
+                        <button onClick={() => handleDetails(d.id)} style={{ display: 'block', width: '100%', padding: '8px 12px', background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer' }}>Détails</button>
+                        <button onClick={() => handleDelete(d.id)} style={{ display: 'block', width: '100%', padding: '8px 12px', background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer' }}>Supprimer</button>
+                      </div>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>

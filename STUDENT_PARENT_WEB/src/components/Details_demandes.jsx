@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import DashboardLayout from './DashboardLayout';

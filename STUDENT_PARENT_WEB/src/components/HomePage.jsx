@@ -19,19 +19,19 @@ const HomePage = () => {
             <br />
             <span className="black">
                gestion des  </span>
-                <span style={{ color: '#4ECDC4', fontWeight: 900 }}> frais de scolarité 
-                      <span className="black"> et </span>
-                       documents
+                <span style={{ color: '#4ECDC4', fontWeight: 900 }}> documents
+                      <span className="black"> pour </span>
+                       parents et étudiants
             </span>
           </h1>
           <div className="homepage-rubriques-row homepage-rubriques-row-centered">
-            <div className="homepage-bigcard" onClick={() => navigate('/frais-scolarite')}>
-              <img src="/frais-de-scolarite.png" alt="Frais Scolarité" className="homepage-bigicon" />
-              <div className="homepage-bigtitle">Frais Scolarité</div>
+            <div className="homepage-bigcard" onClick={() => navigate('/login/parents')}>
+              <img src="/parents.png" alt="Parents" className="homepage-bigicon" />
+              <div className="homepage-bigtitle">Parents</div>
             </div>
-            <div className="homepage-bigcard" onClick={() => navigate('/login')}>
-              <img src="/fichier-de-documents.png" alt="Gestion des documents administratifs" className="homepage-bigicon" />
-              <div className="homepage-bigtitle">Gestion des documents administratifs</div>
+            <div className="homepage-bigcard" onClick={() => navigate('/login/students')}>
+              <img src="/graduated.png" alt="Etudiants" className="homepage-bigicon" />
+              <div className="homepage-bigtitle">Etudiants</div>
             </div>
           </div>
         </div>

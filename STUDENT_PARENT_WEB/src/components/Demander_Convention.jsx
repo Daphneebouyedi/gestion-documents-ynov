@@ -1,30 +1,40 @@
- import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Generer_Convention.css';
+import './Demander_Convention.css';
 import Ynov from '../img/Ynov.png';
 import jsPDF from 'jspdf';
-import { useMutation } from "convex/react";
+import { useMutation, useAction, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import DashboardLayout from './DashboardLayout';
 
-
-const Generer = () => {
+const Demander = () => {
     const navigate = useNavigate();
-    const createConvention = useMutation(api.conventions.createConvention);
+  const createConvention = useMutation(api.conventions.createInternshipConvention);
+
+    const [token, setToken] = useState(null);
+    const [userIdFromToken, setUserIdFromToken] = useState(null);
+    const verifyTokenAction = useAction(api.authActions.verifyTokenAction);
+    const user = useQuery(api.auth.getUser, userIdFromToken ? { userId: userIdFromToken } : "skip");
 
     const [formData, setFormData] = useState({
         // Période de stage
         dateDebut: '',
         dateFin: '',
-        // Stagiaire
-        stagiaireNom: '',
-        stagiairePrenom: '',
-        stagiaireCivilite: '',
-        stagiaireAdresse: '',
-        stagiaireCodePostal: '',
-        stagiaireVille: '',
-        stagiaireTelephone: '',
-        stagiaireEmail: '',
+        // Candidat
+        civiliteCandidat: '',
+        nomCandidat: '',
+        prenomCandidat: '',
+        dateNaissanceCandidat: '',
+        lieuNaissanceCandidat: '',
+        paysCandidat: '',
+        nationaliteCandidat: '',
+        adresseCandidat: '',
+        codePostalCandidat: '',
+        villeCandidat: '',
+        telephoneCandidat: '',
+        portableCandidat: '',
+        emailCandidat: '',
+        idCandidat: '',
         // Entreprise
         entrepriseType: '',
         entrepriseNom: '',
@@ -56,6 +66,45 @@ const Generer = () => {
         indemniteCommentaire: ''
     });
 
+    useEffect(() => {
+        const storedToken = localStorage.getItem("jwtToken");
+        if (storedToken) {
+          setToken(storedToken);
+          const verifyAndSetUserId = async () => {
+            try {
+              const id = await verifyTokenAction({ token: storedToken });
+              setUserIdFromToken(id);
+            } catch (error) {
+              console.error("Token verification failed:", error);
+              localStorage.removeItem("jwtToken");
+              navigate("/login");
+            }
+          };
+          verifyAndSetUserId();
+        } else {
+          navigate("/login");
+        }
+      }, [token, verifyTokenAction, navigate]);
+
+      useEffect(() => {
+        if (user) {
+          setFormData(prev => ({
+            ...prev,
+            civiliteCandidat: user.civilite || '',
+            nomCandidat: user.lastName || '',
+            prenomCandidat: user.firstName || '',
+            dateNaissanceCandidat: user.dateOfBirth || '',
+            paysCandidat: user.country || '',
+            nationaliteCandidat: user.nationality || '',
+            adresseCandidat: user.address || '',
+            codePostalCandidat: user.postalCode || '',
+            villeCandidat: user.city || '',
+            telephoneCandidat: user.phone || '',
+            emailCandidat: user.email || '',
+          }));
+        }
+      }, [user]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
@@ -63,11 +112,12 @@ const Generer = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await createConvention(formData);
+        await createConvention({
+            ...formData,
+            type: 'Convention de stage'
+        });
         generatePdf(); // Appel à la fonction de génération
-        setTimeout(() => {
-           navigate('/documents/genere');
-        }, 1000);
+        navigate('/demandes');
     };
 
     const handleBack = () => {
@@ -171,11 +221,13 @@ const Generer = () => {
         // --- 1. LE STAGIAIRE ---
         drawSectionHeader("Informations sur le Stagiaire");
         const stagiaireData = [
-            { label: "Nom & Prénom", value: `${formData.stagiaireNom} ${formData.stagiairePrenom}` },
-            { label: "Civilité", value: formData.stagiaireCivilite },
-            { label: "Adresse", value: `${formData.stagiaireAdresse}, ${formData.stagiaireCodePostal} ${formData.stagiaireVille}` },
-            { label: "Email", value: formData.stagiaireEmail },
-            { label: "Téléphone", value: formData.stagiaireTelephone },
+            { label: "Nom & Prénom", value: `${formData.nomCandidat} ${formData.prenomCandidat}` },
+            { label: "Date de naissance", value: formData.dateNaissanceCandidat.split('-').reverse().join('/') },
+            { label: "Civilité", value: formData.civiliteCandidat },
+            { label: "Adresse", value: `${formData.adresseCandidat}, ${formData.codePostalCandidat} ${formData.villeCandidat}` },
+            { label: "Pays", value: formData.paysCandidat },
+            { label: "Email", value: formData.emailCandidat },
+            { label: "Téléphone", value: formData.telephoneCandidat },
         ];
         drawSectionData(stagiaireData);
         
@@ -269,13 +321,13 @@ const Generer = () => {
         doc.line(respLegalX, sigLineY, respLegalX + sigWidth, sigLineY);
 
         // --- Sauvegarde ---
-        doc.save(`Convention_Stage_${formData.stagiaireNom}_${formData.stagiairePrenom}.pdf`);
+        doc.save(`Convention_Stage_${formData.nomCandidat}_${formData.prenomCandidat}.pdf`);
     };
     // --------------------------------------------------------------------------------
 
     // Reste du code du composant React (votre formulaire HTML)
   return (
-    <DashboardLayout pageTitle="Générer une Convention de Stage" pageDescription="">
+    <DashboardLayout pageTitle="Demander une Convention de Stage" pageDescription="">
       <div className="convention-container">
                 <form onSubmit={handleSubmit} className="convention-form">
 
@@ -293,44 +345,72 @@ const Generer = () => {
                     </div>
                 </fieldset>
 
-                <fieldset>
-                    <legend>Le Stagiaire</legend>
-                    <div className="form-grid">
-                        <div className="form-group">
-                            <label htmlFor="stagiaireNom">Nom</label>
-                            <input type="text" id="stagiaireNom" name="stagiaireNom" value={formData.stagiaireNom} onChange={handleChange} required />
+                <fieldset className="ce-fieldset">
+                    <legend>ÉTAT CIVIL DU CANDIDAT</legend>
+                    <div className="ce-grid">
+                        <div className="ce-form-group">
+                            <label>Civilité :</label>
+                            <div className="ce-radio-group">
+                                <label><input type="radio" name="civiliteCandidat" value="Mr" checked={formData.civiliteCandidat === 'Mr'} onChange={handleChange} disabled />Mr.</label>
+                                <label><input type="radio" name="civiliteCandidat" value="Mme" checked={formData.civiliteCandidat === 'Mme'} onChange={handleChange} disabled />Mme.</label>
+                            </div>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="stagiairePrenom">Prénom</label>
-                            <input type="text" id="stagiairePrenom" name="stagiairePrenom" value={formData.stagiairePrenom} onChange={handleChange} required />
+                        <div className="ce-form-group ce-full-width">
+                            <label>Nom :</label>
+                            <input type="text" name="nomCandidat" value={formData.nomCandidat} onChange={handleChange} required readOnly />
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="stagiaireCivilite">Civilité</label>
-                            <select id="stagiaireCivilite" name="stagiaireCivilite" value={formData.stagiaireCivilite} onChange={handleChange}>
-                                <option>Monsieur</option>
-                                <option>Madame</option>
-                            </select>
+                        <div className="ce-form-group ce-full-width">
+                            <label>Prénoms :</label>
+                            <input type="text" name="prenomCandidat" value={formData.prenomCandidat} onChange={handleChange} required readOnly />
                         </div>
-                        <div className="form-group full-width">
-                            <label htmlFor="stagiaireAdresse">Adresse</label>
-                            <input type="text" id="stagiaireAdresse" name="stagiaireAdresse" value={formData.stagiaireAdresse} onChange={handleChange} required />
+                        <div className="ce-form-group">
+                            <label>Né(e) le :</label>
+                            <input type="date" name="dateNaissanceCandidat" value={formData.dateNaissanceCandidat} onChange={handleChange} required readOnly />
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="stagiaireCodePostal">Code Postal</label>
-                            <input type="text" id="stagiaireCodePostal" name="stagiaireCodePostal" value={formData.stagiaireCodePostal} onChange={handleChange} required />
+                        <div className="ce-form-group">
+                            <label>à :</label>
+                            <input type="text" name="lieuNaissanceCandidat" value={formData.lieuNaissanceCandidat} onChange={handleChange} required />
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="stagiaireVille">Ville</label>
-                            <input type="text" id="stagiaireVille" name="stagiaireVille" value={formData.stagiaireVille} onChange={handleChange} required />
+                        <div className="ce-form-group">
+                            <label>Pays :</label>
+                            <input type="text" name="paysCandidat" value={formData.paysCandidat} onChange={handleChange} required readOnly />
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="stagiaireTelephone">Téléphone</label>
-                            <input type="tel" id="stagiaireTelephone" name="stagiaireTelephone" value={formData.stagiaireTelephone} onChange={handleChange} required />
+                        <div className="ce-form-group">
+                            <label>Nationalité :</label>
+                            <input type="text" name="nationaliteCandidat" value={formData.nationaliteCandidat} onChange={handleChange} required readOnly />
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="stagiaireEmail">Adresse E-mail</label>
-                            <input type="email" id="stagiaireEmail" name="stagiaireEmail" value={formData.stagiaireEmail} onChange={handleChange} required />
+                        <div className="ce-form-group ce-full-width">
+                            <label>Adresse :</label>
+                            <input type="text" name="adresseCandidat" value={formData.adresseCandidat} onChange={handleChange} required readOnly />
                         </div>
+                        <div className="ce-form-group">
+                            <label>Code postal :</label>
+                            <input type="text" name="codePostalCandidat" value={formData.codePostalCandidat} onChange={handleChange} required readOnly />
+                        </div>
+                        <div className="ce-form-group">
+                            <label>Ville :</label>
+                            <input type="text" name="villeCandidat" value={formData.villeCandidat} onChange={handleChange} required readOnly />
+                        </div>
+                        <div className="ce-form-group">
+                            <label>Téléphone :</label>
+                            <input type="text" name="telephoneCandidat" value={formData.telephoneCandidat} onChange={handleChange} required readOnly />
+                        </div>
+                        <div className="ce-form-group">
+                            <label>Portable :</label>
+                            <input type="text" name="portableCandidat" value={formData.portableCandidat} onChange={handleChange} />
+                        </div>
+                        <div className="ce-form-group">
+                            <label>Email :</label>
+                            <input type="email" name="emailCandidat" value={formData.emailCandidat} onChange={handleChange} required readOnly />
+                        </div>
+                        <div className="ce-form-group ce-full-width">
+                            <label>N° de carte d'identité / passeport / carte de séjour :</label>
+                            <input type="text" name="idCandidat" value={formData.idCandidat} onChange={handleChange} required />
+                        </div>
+                    </div>
+                    <div className="ce-photo-box">
+                        <span className="ce-photo-placeholder">Photo d'identité</span>
+                        <input type="file" accept="image/*" className="ce-photo-input" />
                     </div>
                 </fieldset>
 
@@ -375,7 +455,7 @@ const Generer = () => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="entrepriseNbEmployes">Nombre d'employés</label>
-                            <input type="number" id="entrepriseNbEmployes" name="entrepriseNbEmployes" value={formData.entrepriseNbEmployes} onChange={handleChange} />
+                            <input type="number" id="entrepriseNbEmployes" name="entrepriseNbEmployes" value={formData.entrepriseNbEmployes} onChange={handleChange} min="0" max="300" />
                         </div>
                     </div>
                 </fieldset>
@@ -448,7 +528,7 @@ const Generer = () => {
                     <div className="form-grid">
                         <div className="form-group">
                             <label htmlFor="indemniteMontant">Montant</label>
-                            <input type="number" id="indemniteMontant" name="indemniteMontant" value={formData.indemniteMontant} onChange={handleChange} />
+                            <input type="number" id="indemniteMontant" name="indemniteMontant" value={formData.indemniteMontant} onChange={handleChange} min="0" max="300" />
                         </div>
                         <div className="form-group">
                             <label htmlFor="indemniteMonnaie">Monnaie</label>
@@ -467,7 +547,7 @@ const Generer = () => {
 
                 <div className="form-actions">
                     <button onClick={handleBack} className="cancel-button">Annuler</button>
-                    <button type="submit" className="submit-button" onClick={() => navigate("/dashboard")}>Générer la convention</button>        
+                    <button type="submit" className="submit-button" onClick={() => navigate("/dashboard")}>Demander </button>        
                 </div>
                 </form>
             </div>
@@ -475,4 +555,4 @@ const Generer = () => {
     );
 };
 
-export default Generer;
+export default Demander;

@@ -6,8 +6,7 @@ import { api } from "../convex/_generated/api";
 const Sidebar = ({ showUserMenu, setShowUserMenu }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [showGenererPanel, setShowGenererPanel] = React.useState(false);
-  const [showDocumentsPanel, setShowDocumentsPanel] = React.useState(false);
+  const [showDemanderPanel, setShowDemanderPanel] = React.useState(false);
 
   const [token, setToken] = useState(null);
   const [userIdFromToken, setUserIdFromToken] = useState(null);
@@ -77,45 +76,37 @@ const Sidebar = ({ showUserMenu, setShowUserMenu }) => {
         </div>
         <nav className="navigation" style={{ margin: 0 }}>
           <ul className="nav-list" style={{ listStyle: 'none', padding: 0, margin: 0, width: '100%', display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <li className={`nav-item${location.pathname === '/dashboard' ? ' active' : ''}`} onClick={() => navigate('/dashboard')}
-              style={getExactNavItemStyle('/dashboard')}>
-              Accueil
-            </li>
             <li className={`nav-item${location.pathname.startsWith('/demandes') ? ' active' : ''}`} onClick={() => navigate('/demandes')}
               style={getNavItemStyle('/demandes')}>
               Demandes
             </li>
             <li className={`nav-item${location.pathname.startsWith('/alerts') ? ' active' : ''}`} onClick={() => navigate('/alerts')}
               style={getNavItemStyle('/alerts')}>
-              Alertes et documents en attente
+              Notifications
             </li>
             <li className={`nav-item${location.pathname.startsWith('/documents') ? ' active' : ''}`}
-              onClick={() => setShowDocumentsPanel(!showDocumentsPanel)}
+              onClick={() => navigate('/documents-dispo')}
               style={{...getNavItemStyle('/documents'), position: 'relative'}}>
-              Documents
+              Documents disponibles
             </li>
-            <li className={`nav-item${location.pathname.startsWith('/generer') ? ' active' : ''}`}
-              onClick={() => setShowGenererPanel(!showGenererPanel)}
-              style={{...getNavItemStyle('/generer'), position: 'relative'}}>
-              Générer un document
+            <li className={`nav-item${location.pathname.startsWith('/Demander') ? ' active' : ''}`}
+              onClick={() => setShowDemanderPanel(!showDemanderPanel)}
+              style={{...getNavItemStyle('/Demander'), position: 'relative'}}>
+              Demander un document
             </li>
             <li className={`nav-item${location.pathname === '/terms' ? ' active' : ''}`} onClick={() => navigate('/terms')}
               style={getExactNavItemStyle('/terms')}>
               Conditions générales
             </li>
-            <li className={`nav-item${location.pathname === '/gestion-utilisateurs' ? ' active' : ''}`} onClick={() => navigate('/gestion-utilisateurs')}
-              style={getExactNavItemStyle('/gestion-utilisateurs')}>
-              Gestion utilisateurs
-            </li>
           </ul>
         </nav>
       </div>
 
-      {/* Panneau latéral à droite pour Documents */}
-      {showDocumentsPanel && (
+      {/* Panneau latéral à droite pour Demander un document */}
+      {showDemanderPanel && (
         <>
           {/* Overlay flouté */}
-          <div onClick={() => setShowDocumentsPanel(false)} style={{
+          <div onClick={() => setShowDemanderPanel(false)} style={{
             position: 'fixed',
             top: 0,
             left: 0,
@@ -150,7 +141,7 @@ const Sidebar = ({ showUserMenu, setShowUserMenu }) => {
                 to { transform: translateX(0); opacity: 1; }
               }
             `}</style>
-            <button onClick={() => setShowDocumentsPanel(false)} style={{
+            <button onClick={() => setShowDemanderPanel(false)} style={{
               position: 'absolute',
               top: 16,
               right: 18,
@@ -164,91 +155,32 @@ const Sidebar = ({ showUserMenu, setShowUserMenu }) => {
               height: 36,
               transition: 'background 0.2s',
             }} title="Fermer le menu">×</button>
-            <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 18, marginLeft: 32, marginTop: 8, color: '#222' }}>Documents</div>
+            <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 18, marginLeft: 32, marginTop: 8, color: '#222' }}>Demander un document</div>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li className={`nav-item${location.pathname === '/documents-dispo' ? ' active' : ''}`} onClick={() => { setShowDocumentsPanel(false); navigate('/documents-dispo'); }}
-                style={{ borderRadius: 8, padding: '12px 18px', margin: '0 24px 8px 24px', color: '#222', fontFamily: 'Arial, sans-serif', fontWeight: 500, background: location.pathname === '/documents-dispo' ? '#23c2a2' : 'transparent', color: location.pathname === '/documents-dispo' ? '#fff' : '#222', transition: 'background 0.2s, color 0.2s', cursor: 'pointer', fontSize: 16 }}>
-                Documents disponibles
-              </li>
-              <li className={`nav-item${location.pathname === '/documents-transferts' ? ' active' : ''}`} onClick={() => { setShowDocumentsPanel(false); navigate('/documents-transferts'); }}
-                style={{ borderRadius: 8, padding: '12px 18px', margin: '0 24px 8px 24px', color: '#222', fontFamily: 'Arial, sans-serif', fontWeight: 500, background: location.pathname === '/documents-transferts' ? '#23c2a2' : 'transparent', color: location.pathname === '/documents-transferts' ? '#fff' : '#222', transition: 'background 0.2s, color 0.2s', cursor: 'pointer', fontSize: 16 }}>
-                Documents transférés
-              </li>
-              <li className={`nav-item${location.pathname.startsWith('/documents-generes') ? ' active' : ''}`} onClick={() => { setShowDocumentsPanel(false); navigate('/documents-generes'); }}
-                style={{ borderRadius: 8, padding: '12px 18px', margin: '0 24px 8px 24px', color: '#222', fontFamily: 'Arial, sans-serif', fontWeight: 500, background: location.pathname.startsWith('/documents-generes') ? '#23c2a2' : 'transparent', color: location.pathname.startsWith('/documents-generes') ? '#fff' : '#222', transition: 'background 0.2s, color 0.2s', cursor: 'pointer', fontSize: 16 }}>
-                Documents générés
-              </li>
-            </ul>
-          </div>
-        </>
-      )}
-      {/* Panneau latéral à droite pour Générer un document */}
-      {showGenererPanel && (
-        <>
-          {/* Overlay flouté */}
-          <div onClick={() => setShowGenererPanel(false)} style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            background: 'rgba(30, 41, 59, 0.18)',
-            backdropFilter: 'blur(2.5px)',
-            zIndex: 999,
-            transition: 'background 0.3s',
-          }} />
-          <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 320,
-            height: '100vh',
-            width: 300,
-            background: '#fff',
-            boxShadow: '4px 0 24px 0 rgba(30,41,59,0.13)',
-            zIndex: 1000,
-            display: 'flex',
-            flexDirection: 'column',
-            paddingTop: 48,
-            borderLeft: 'none',
-            borderTopRightRadius: 18,
-            borderBottomRightRadius: 18,
-            animation: 'slideInPanel .32s cubic-bezier(.4,0,.2,1)',
-            overflow: 'hidden',
-          }}>
-            <style>{`
-              @keyframes slideInPanel {
-                from { transform: translateX(60px); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-              }
-            `}</style>
-            <button onClick={() => setShowGenererPanel(false)} style={{
-              position: 'absolute',
-              top: 16,
-              right: 18,
-              background: 'none',
-              border: 'none',
-              fontSize: 22,
-              color: '#888',
-              cursor: 'pointer',
-              borderRadius: '50%',
-              width: 36,
-              height: 36,
-              transition: 'background 0.2s',
-            }} title="Fermer le menu">×</button>
-            <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 18, marginLeft: 32, marginTop: 8, color: '#222' }}>Générer un document</div>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li className={`nav-item${location.pathname === '/generer/convention-stage' ? ' active' : ''}`} onClick={() => { setShowGenererPanel(false); navigate('/generer/convention-stage'); }}
-                style={{ borderRadius: 8, padding: '12px 18px', margin: '0 24px 8px 24px', color: '#222', fontFamily: 'Arial, sans-serif', fontWeight: 500, background: location.pathname === '/generer/convention-stage' ? '#23c2a2' : 'transparent', color: location.pathname === '/generer/convention-stage' ? '#fff' : '#222', transition: 'background 0.2s, color 0.2s', cursor: 'pointer', fontSize: 16 }}>
+              <li className={`nav-item${location.pathname === '/Demander/convention-stage' ? ' active' : ''}`} onClick={() => { setShowDemanderPanel(false); navigate('/Demander/convention-stage'); }}
+                style={{ borderRadius: 8, padding: '12px 18px', margin: '0 24px 8px 24px', color: '#222', fontFamily: 'Arial, sans-serif', fontWeight: 500, background: location.pathname === '/Demander/convention-stage' ? '#23c2a2' : 'transparent', color: location.pathname === '/Demander/convention-stage' ? '#fff' : '#222', transition: 'background 0.2s, color 0.2s', cursor: 'pointer', fontSize: 16 }}>
                 Convention de stage
               </li>
-              <li className={`nav-item${location.pathname === '/generer/convention-etude' ? ' active' : ''}`} onClick={() => { setShowGenererPanel(false); navigate('/generer/convention-etude'); }}
-                style={{ borderRadius: 8, padding: '12px 18px', margin: '0 24px 8px 24px', color: '#222', fontFamily: 'Arial, sans-serif', fontWeight: 500, background: location.pathname === '/generer/convention-etude' ? '#23c2a2' : 'transparent', color: location.pathname === '/generer/convention-etude' ? '#fff' : '#222', transition: 'background 0.2s, color 0.2s', cursor: 'pointer', fontSize: 16 }}>
+              <li className={`nav-item${location.pathname === '/Demander/convention-etude' ? ' active' : ''}`} onClick={() => { setShowDemanderPanel(false); navigate('/Demander/convention-etude'); }}
+                style={{ borderRadius: 8, padding: '12px 18px', margin: '0 24px 8px 24px', color: '#222', fontFamily: 'Arial, sans-serif', fontWeight: 500, background: location.pathname === '/Demander/convention-etude' ? '#23c2a2' : 'transparent', color: location.pathname === '/Demander/convention-etude' ? '#fff' : '#222', transition: 'background 0.2s, color 0.2s', cursor: 'pointer', fontSize: 16 }}>
                 Convention d'étude
               </li>
-              <li className={`nav-item${location.pathname === '/generer/attestation' ? ' active' : ''}`} onClick={() => { setShowGenererPanel(false); navigate('/generer/attestation'); }}
-                style={{ borderRadius: 8, padding: '12px 18px', margin: '0 24px 8px 24px', color: '#222', fontFamily: 'Arial, sans-serif', fontWeight: 500, background: location.pathname === '/generer/attestation' ? '#23c2a2' : 'transparent', color: location.pathname === '/generer/attestation' ? '#fff' : '#222', transition: 'background 0.2s, color 0.2s', cursor: 'pointer', fontSize: 16 }}>
-                Attestation
-              </li> 
+              <li className={`nav-item${location.pathname === '/Demander/attestation' ? ' active' : ''}`} onClick={() => { setShowDemanderPanel(false); navigate('/Demander/attestation'); }}
+                style={{ borderRadius: 8, padding: '12px 18px', margin: '0 24px 8px 24px', color: '#222', fontFamily: 'Arial, sans-serif', fontWeight: 500, background: location.pathname === '/Demander/attestation' ? '#23c2a2' : 'transparent', color: location.pathname === '/Demander/attestation' ? '#fff' : '#222', transition: 'background 0.2s, color 0.2s', cursor: 'pointer', fontSize: 16 }}>
+                Attestation frais de scolarité
+              </li>
+              <li className={`nav-item${location.pathname === '/Demander/attestation-inscription' ? ' active' : ''}`} onClick={() => { setShowDemanderPanel(false); navigate('/Demander/attestation-inscription'); }}
+                style={{ borderRadius: 8, padding: '12px 18px', margin: '0 24px 8px 24px', color: '#222', fontFamily: 'Arial, sans-serif', fontWeight: 500, background: location.pathname === '/Demander/attestation-inscription' ? '#23c2a2' : 'transparent', color: location.pathname === '/Demander/attestation-inscription' ? '#fff' : '#222', transition: 'background 0.2s, color 0.2s', cursor: 'pointer', fontSize: 16 }}>
+                Attestation d’inscription
+              </li>
+              <li className={`nav-item${location.pathname === '/Demander/attestation-reussite' ? ' active' : ''}`} onClick={() => { setShowDemanderPanel(false); navigate('/Demander/attestation-reussite'); }}
+                style={{ borderRadius: 8, padding: '12px 18px', margin: '0 24px 8px 24px', color: '#222', fontFamily: 'Arial, sans-serif', fontWeight: 500, background: location.pathname === '/Demander/attestation-reussite' ? '#23c2a2' : 'transparent', color: location.pathname === '/Demander/attestation-reussite' ? '#fff' : '#222', transition: 'background 0.2s, color 0.2s', cursor: 'pointer', fontSize: 16 }}>
+                Attestation de réussite
+              </li>
+              <li className={`nav-item${location.pathname === '/Demander/bulletin' ? ' active' : ''}`} onClick={() => { setShowDemanderPanel(false); navigate('/Demander/bulletin'); }}
+                style={{ borderRadius: 8, padding: '12px 18px', margin: '0 24px 8px 24px', color: '#222', fontFamily: 'Arial, sans-serif', fontWeight: 500, background: location.pathname === '/Demander/bulletin' ? '#23c2a2' : 'transparent', color: location.pathname === '/Demander/bulletin' ? '#fff' : '#222', transition: 'background 0.2s, color 0.2s', cursor: 'pointer', fontSize: 16 }}>
+                Bulletin
+              </li>
             </ul>
           </div>
         </>
@@ -270,7 +202,9 @@ const Sidebar = ({ showUserMenu, setShowUserMenu }) => {
               <span style={{ color: '#23c2a2', fontSize: 14, fontWeight: 500, letterSpacing: 0.1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>
                 {user ? user.email : 'contact@etando.ma'}
               </span>
-              <span style={{ marginTop: 4, background: '#e6f7f1', color: '#23c2a2', fontWeight: 600, borderRadius: 8, padding: '2.5px 12px', fontSize: 13, letterSpacing: 0.2, border: '1.5px solid #23c2a2' }}>Administrateur</span>
+              <span style={{ marginTop: 4, background: '#e6f7f1', color: '#23c2a2', fontWeight: 600, borderRadius: 8, padding: '2.5px 12px', fontSize: 13, letterSpacing: 0.2, border: '1.5px solid #23c2a2' }}>
+                {user ? (user.role === 'student' ? 'Étudiant' : user.role === 'parent' ? 'Parent' : 'Administrateur') : 'Administrateur'}
+              </span>
             </div>
           </div>
         </div>

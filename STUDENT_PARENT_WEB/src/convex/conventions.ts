@@ -58,6 +58,7 @@ export const requestConvention = mutation({
 // Create and persist a full convention entry
 export const createConvention = mutation({
   args: {
+    type: v.string(),
     // État civil du candidat
     civiliteCandidat: v.string(),
     nomCandidat: v.string(),
@@ -144,6 +145,7 @@ export const listConventions = query({
 // Internship (stage) convention persistence and listing
 export const createInternshipConvention = mutation({
   args: {
+    type: v.string(),
     dateDebut: v.string(),
     dateFin: v.string(),
     stagiaireNom: v.string(),
@@ -212,5 +214,19 @@ export const getUserConventions = query({
   args: { userId: v.string() },
   handler: async (ctx, { userId }) => {
     return await ctx.db.query("conventions").filter(q => q.eq(q.field("idCandidat"), userId)).collect();
+  },
+});
+
+export const getInternshipConventionById = query({
+  args: { id: v.id("internshipConventions") },
+  handler: async (ctx, { id }) => {
+    return await ctx.db.get(id);
+  },
+});
+
+export const deleteInternshipConvention = mutation({
+  args: { id: v.id("internshipConventions") },
+  handler: async (ctx, { id }) => {
+    await ctx.db.delete(id);
   },
 });

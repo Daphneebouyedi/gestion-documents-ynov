@@ -1,10 +1,10 @@
- import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Convention_Etude.css";
 import Ynov from '../img/Ynov.png';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { useMutation } from "convex/react";
+import { useMutation, useAction, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import DashboardLayout from './DashboardLayout';
 
@@ -12,6 +12,42 @@ const ConventionEtudeForm = () => {
   const navigate = useNavigate();
   const createConvention = useMutation(api.conventions.createConvention);
   const generateUploadUrl = useMutation(api.documents.generateUploadUrl);
+
+  const getUserProfile = useAction(api.auth.getUserProfile);
+
+  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('jwtToken');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      getUserProfile({ authToken: token }).then(setUser).catch(console.error);
+    } else {
+      setUser(null);
+    }
+  }, [token, getUserProfile]);
+
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        nomCandidat: user.lastName || prev.nomCandidat,
+        prenomCandidat: user.firstName || prev.prenomCandidat,
+        dateNaissanceCandidat: user.dateNaissance || prev.dateNaissanceCandidat,
+        paysCandidat: user.country || prev.paysCandidat,
+        adresseCandidat: user.address || prev.adresseCandidat,
+        villeCandidat: user.ville || prev.villeCandidat,
+        telephoneCandidat: user.phone || prev.telephoneCandidat,
+        emailCandidat: user.email || prev.emailCandidat,
+      }));
+    }
+  }, [user]);
 
   const [formData, setFormData] = useState({
     // État civil du candidat
@@ -107,8 +143,9 @@ const ConventionEtudeForm = () => {
       const { photoCandidat, ...restFormData } = formData; // Destructure to exclude photoCandidat
 
       await createConvention({
-        ...restFormData, // Spread the rest of the form data
-        ...(photoCandidatStorageId === null ? undefined : photoCandidatStorageId !== undefined && { photoCandidatStorageId }), // Explicitly convert null to undefined, and only add if defined
+        ...restFormData, 
+        type: 'Convention d\'étude',
+        ...(photoCandidatStorageId !== undefined ? { photoCandidatStorageId } : {}),
       });
       // alert("Convention enregistrée avec succès!"); // Removed alert
       // Clear form or navigate
@@ -120,7 +157,7 @@ const ConventionEtudeForm = () => {
         etudes: [],
         commentaire: "",
       });
-      window.location.href = "/documents/genere"; // Navigate after successful save
+      navigate('/demandes');
     } catch (error) {
       console.error("Error creating convention:", error);
       alert("Erreur lors de l'enregistrement de la convention.");
@@ -447,7 +484,7 @@ const ConventionEtudeForm = () => {
 
   // Reste du code du composant React (non modifié)
   return (
-    <DashboardLayout pageTitle="Générer une convention d'étude" pageDescription="">
+    <DashboardLayout pageTitle="Demander une convention d'étude" pageDescription="">
       <div className="ce-main-container">
         <div className="ce-content-wrapper">
           <form onSubmit={handleSubmit} className="ce-form">
@@ -466,6 +503,7 @@ const ConventionEtudeForm = () => {
                       value="Mr"
                       checked={formData.civiliteCandidat === "Mr"}
                       onChange={handleChange}
+                      disabled={!!user}
                     />
                     Mr.
                   </label>
@@ -476,6 +514,7 @@ const ConventionEtudeForm = () => {
                       value="Mme"
                       checked={formData.civiliteCandidat === "Mme"}
                       onChange={handleChange}
+                      disabled={!!user}
                     />
                     Mme.
                   </label>
@@ -485,17 +524,17 @@ const ConventionEtudeForm = () => {
               {/* Nom et prénom */}
               <div className="ce-form-group ce-full-width">
                 <label>Nom :</label>
-                <input type="text" name="nomCandidat" value={formData.nomCandidat} onChange={handleChange} required />
+                <input type="text" name="nomCandidat" value={formData.nomCandidat} onChange={handleChange} required readOnly={!!user} />
               </div>
               <div className="ce-form-group ce-full-width">
                 <label>Prénoms :</label>
-                <input type="text" name="prenomCandidat" value={formData.prenomCandidat} onChange={handleChange} required />
+                <input type="text" name="prenomCandidat" value={formData.prenomCandidat} onChange={handleChange} required readOnly={!!user} />
               </div>
 
               {/* Naissance */}
               <div className="ce-form-group">
                 <label>Né(e) le :</label>
-                <input type="date" name="dateNaissanceCandidat" value={formData.dateNaissanceCandidat} onChange={handleChange} required />
+                <input type="date" name="dateNaissanceCandidat" value={formData.dateNaissanceCandidat} onChange={handleChange} required readOnly={!!user} />
               </div>
               <div className="ce-form-group">
                 <label>à :</label>
@@ -503,29 +542,29 @@ const ConventionEtudeForm = () => {
               </div>
               <div className="ce-form-group">
                 <label>Pays :</label>
-                <input type="text" name="paysCandidat" value={formData.paysCandidat} onChange={handleChange} required />
+                <input type="text" name="paysCandidat" value={formData.paysCandidat} onChange={handleChange} required readOnly={!!user} />
               </div>
               <div className="ce-form-group">
                 <label>Nationalité :</label>
-                <input type="text" name="nationaliteCandidat" value={formData.nationaliteCandidat} onChange={handleChange} required />
+                <input type="text" name="nationaliteCandidat" value={formData.nationaliteCandidat} onChange={handleChange} required readOnly={!!user} />
               </div>
 
               {/* Adresse */}
               <div className="ce-form-group ce-full-width">
                 <label>Adresse :</label>
-                <input type="text" name="adresseCandidat" value={formData.adresseCandidat} onChange={handleChange} required />
+                <input type="text" name="adresseCandidat" value={formData.adresseCandidat} onChange={handleChange} required readOnly={!!user} />
               </div>
               <div className="ce-form-group">
                 <label>Code postal :</label>
-                <input type="text" name="codePostalCandidat" value={formData.codePostalCandidat} onChange={handleChange} required />
+                <input type="text" name="codePostalCandidat" value={formData.codePostalCandidat} onChange={handleChange} required readOnly={!!user} />
               </div>
               <div className="ce-form-group">
                 <label>Ville :</label>
-                <input type="text" name="villeCandidat" value={formData.villeCandidat} onChange={handleChange} required />
+                <input type="text" name="villeCandidat" value={formData.villeCandidat} onChange={handleChange} required readOnly={!!user} />
               </div>
               <div className="ce-form-group">
                 <label>Téléphone :</label>
-                <input type="text" name="telephoneCandidat" value={formData.telephoneCandidat} onChange={handleChange} required />
+                <input type="text" name="telephoneCandidat" value={formData.telephoneCandidat} onChange={handleChange} required readOnly={!!user} />
               </div>
               <div className="ce-form-group">
                 <label>Portable :</label>
@@ -533,7 +572,7 @@ const ConventionEtudeForm = () => {
               </div>
               <div className="ce-form-group">
                 <label>Email :</label>
-                <input type="email" name="emailCandidat" value={formData.emailCandidat} onChange={handleChange} required />
+                <input type="email" name="emailCandidat" value={formData.emailCandidat} onChange={handleChange} required readOnly={!!user} />
               </div>
 
               {/* ID et photo */}
@@ -698,8 +737,6 @@ const ConventionEtudeForm = () => {
                 <label>Nationalité :</label>
                 <input type="text" name="nationaliteRespFin" value={formData.nationaliteRespFin} onChange={handleChange} required />
               </div>
-
-              {/* Adresse */}
               <div className="ce-form-group ce-full-width">
                 <label>Adresse :</label>
                 <input type="text" name="adresseRespFin" value={formData.adresseRespFin} onChange={handleChange} required />
@@ -717,6 +754,10 @@ const ConventionEtudeForm = () => {
                 <input type="text" name="telephoneRespFin" value={formData.telephoneRespFin} onChange={handleChange} required />
               </div>
               <div className="ce-form-group">
+                <label>Portable :</label>
+                <input type="text" name="portableRespFin" value={formData.portableRespFin} onChange={handleChange} />
+              </div>
+              <div className="ce-form-group">
                 <label>Email :</label>
                 <input type="email" name="emailRespFin" value={formData.emailRespFin} onChange={handleChange} required />
               </div>
@@ -730,112 +771,61 @@ const ConventionEtudeForm = () => {
           {/* ---------------- Études antérieures ---------------- */}
           <fieldset className="ce-fieldset">
             <legend>ÉTUDES ANTÉRIEURES</legend>
-            {formData.etudes.map((etude, index) => (
-              <React.Fragment key={index}>
-                <div className="ce-grid">
-                  
-                  {/* Année scolaire */}
+            <div id="etudes-container">
+              {formData.etudes.map((etude, index) => (
+                <div key={index} className="ce-etude-item">
                   <div className="ce-form-group">
                     <label>Année scolaire :</label>
-                    <select
-                      value={etude.annee}
-                      onChange={(e) => handleEtudesChange(index, "annee", e.target.value)}
-                      required
-                    >
-                      <option value="">-- Sélectionner --</option>
-                      <option value="2024-2025">2024-2025</option>
-                      <option value="2023-2024">2023-2024</option>
-                      <option value="2022-2023">2022-2023</option>
-                      <option value="2021-2022">2021-2022</option>
-                      <option value="2020-2021">2020-2021</option>
-                    </select>
+                    <input type="text" name={`annee-${index}`} value={etude.annee} onChange={(e) => handleEtudesChange(index, 'annee', e.target.value)} required />
                   </div>
-
-                  {/* Étude suivie */}
                   <div className="ce-form-group">
                     <label>Étude suivie :</label>
-                    <select
-                      value={etude.etudeSuivie}
-                      onChange={(e) => handleEtudesChange(index, "etudeSuivie", e.target.value)}
-                      required
-                    >
-                      <option value="">-- Sélectionner --</option>
-                      <option value="Lycée">Lycée</option>
-                      <option value="BTS">BTS</option>
-                      <option value="BUT">BUT</option>
-                      <option value="Licence">Licence</option>
-                      <option value="Master">Master</option>
-                      <option value="Autre">Autre</option>
-                    </select>
+                    <input type="text" name={`etudeSuivie-${index}`} value={etude.etudeSuivie} onChange={(e) => handleEtudesChange(index, 'etudeSuivie', e.target.value)} required />
                   </div>
-
-                  {/* Établissement fréquenté */}
                   <div className="ce-form-group">
-                    <label>Établissement fréquenté :</label>
-                    <input
-                      type="text"
-                      value={etude.etablissement}
-                      onChange={(e) => handleEtudesChange(index, "etablissement", e.target.value)}
-                      placeholder="Ex: Lycée Jules Ferry"
-                      required
-                    />
+                    <label>Établissement :</label>
+                    <input type="text" name={`etablissement-${index}`} value={etude.etablissement} onChange={(e) => handleEtudesChange(index, 'etablissement', e.target.value)} required />
                   </div>
-
-                  {/* Diplôme */}
                   <div className="ce-form-group">
                     <label>Diplôme :</label>
-                    <select
-                      value={etude.diplome}
-                      onChange={(e) => handleEtudesChange(index, "diplome", e.target.value)}
-                      required
-                    >
-                      <option value="">-- Sélectionner --</option>
-                      <option value="Baccalauréat">Baccalauréat</option>
-                      <option value="BTS">BTS</option>
-                      <option value="BUT">BUT</option>
-                      <option value="Licence">Licence</option>
-                      <option value="Master">Master</option>
-                      <option value="Doctorat">Doctorat</option>
-                      <option value="Autre">Autre</option>
-                    </select>
+                    <input type="text" name={`diplome-${index}`} value={etude.diplome} onChange={(e) => handleEtudesChange(index, 'diplome', e.target.value)} required />
                   </div>
-
-                  {/* Date d’obtention */}
                   <div className="ce-form-group">
                     <label>Date d'obtention :</label>
-                    <input
-                      type="date"
-                      value={etude.dateObtention}
-                      onChange={(e) => handleEtudesChange(index, "dateObtention", e.target.value)}
-                      required
-                    />
+                    <input type="date" name={`dateObtention-${index}`} value={etude.dateObtention} onChange={(e) => handleEtudesChange(index, 'dateObtention', e.target.value)} required />
                   </div>
+                  <button type="button" onClick={() => {
+                    const updatedEtudes = formData.etudes.filter((_, i) => i !== index);
+                    setFormData((prev) => ({ ...prev, etudes: updatedEtudes }));
+                  }} className="ce-remove-etude-btn">Supprimer</button>
                 </div>
-
-                {index < formData.etudes.length - 1 && <div className="ce-etude-separator"></div>}
-              </React.Fragment>
-            ))}
+              ))}
+              <button type="button" onClick={() => {
+                setFormData((prev) => ({ ...prev, etudes: [...prev.etudes, { annee: '', etudeSuivie: '', etablissement: '', diplome: '', dateObtention: '' }] }));
+              }} className="ce-add-etude-btn">Ajouter une étude</button>
+            </div>
           </fieldset>
 
           {/* ---------------- Commentaires ---------------- */}
           <fieldset className="ce-fieldset">
             <legend>COMMENTAIRES</legend>
             <div className="ce-form-group ce-full-width">
-              <label>Si vous avez interrompu vos études, veuillez indiquer durée + raison :</label>
-              <textarea value={formData.commentaire} onChange={(e) => setFormData({...formData, commentaire: e.target.value})} rows="4" />
+              <label>Commentaires (optionnel) :</label>
+              <textarea name="commentaire" value={formData.commentaire} onChange={handleChange} rows="4" />
             </div>
           </fieldset>
 
-          <div className="ce-form-actions">            
-            <button type="button" className="ce-btn-cancel" onClick={() => navigate("/dashboard")}>Annuler</button>
-            <button type="submit" className="ce-btn-submit">Générer</button>
+          {/* Boutons */}
+          <div className="ce-form-actions">
+            <button type="button" onClick={generatePdf} className="ce-generate-pdf-btn">Générer PDF</button>
+            <button type="submit" className="ce-submit-btn">Soumettre</button>
           </div>
         </form>
       </div>
     </div>
   </DashboardLayout>
-  );
-  };
-  
+);
+
+};
 
 export default ConventionEtudeForm;

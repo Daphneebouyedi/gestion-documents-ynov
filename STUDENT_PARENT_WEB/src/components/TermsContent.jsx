@@ -47,7 +47,7 @@ const TermsContent = ({ readOnly = false }) => {
   };
 
   return (
-    <DashboardLayout pageTitle="Conditions Générales d'Utilisation" pageDescription="Applicables aux administrateurs de la plateforme">
+    <DashboardLayout pageTitle="Conditions Générales d'Utilisation" pageDescription="Applicables aux étudiants et parents utilisateurs de la plateforme">
       <div className="terms-page-wrapper">
         <div className="terms-content-container">
         <main className="terms-body">
@@ -55,7 +55,7 @@ const TermsContent = ({ readOnly = false }) => {
 
           <section>
             <h2>Article 1 : Objet et Champ d'Application</h2>
-            <p>Les présentes Conditions Générales d'Utilisation (CGU) encadrent l'accès et l'utilisation du tableau de bord d'administration (ci-après "la Plateforme"). Tout accès à la Plateforme par un utilisateur habilité (ci-après "l'Administrateur") vaut acceptation sans réserve des présentes CGU. L'Administrateur reconnaît avoir la compétence et les moyens nécessaires pour accéder et utiliser la Plateforme.</p>
+            <p>Les présentes Conditions Générales d'Utilisation (CGU) encadrent l'accès et l'utilisation de la plateforme de gestion documentaire (ci-après "la Plateforme") par les étudiants et parents (ci-après "l'Utilisateur"). Tout accès à la Plateforme vaut acceptation sans réserve des présentes CGU. L'Utilisateur reconnaît avoir la compétence et les moyens nécessaires pour accéder et utiliser la Plateforme.</p>
           </section>
 
           <section>
@@ -63,48 +63,68 @@ const TermsContent = ({ readOnly = false }) => {
             <ul>
               <li><strong>Donnée à Caractère Personnel :</strong> Toute information se rapportant à une personne physique identifiée ou identifiable (ci-après "Personne Concernée"), conformément à l'article 4 du RGPD.</li>
               <li><strong>Traitement :</strong> Toute opération ou tout ensemble d'opérations effectuées ou non à l'aide de procédés automatisés et appliquées à des données ou des ensembles de données à caractère personnel.</li>
-              <li><strong>Administrateur :</strong> Tout membre du personnel habilité à accéder à la Plateforme à des fins de gestion, de consultation ou de traitement de données.</li>
+              <li><strong>Utilisateur :</strong> Étudiant ou parent inscrit sur la Plateforme pour consulter et gérer des documents administratifs.</li>
             </ul>
           </section>
 
           <section>
-            <h2>Article 3 : Obligations Fondamentales de l'Administrateur</h2>
-            <p>L'Administrateur est le garant de la sécurité et de la confidentialité des données qu'il traite. À ce titre, il s'engage à respecter les principes suivants, issus du Règlement Général sur la Protection des Données (RGPD) :</p>
+            <h2>Article 3 : Collecte et Utilisation des Données Personnelles</h2>
+            <p>Conformément au Règlement Général sur la Protection des Données (RGPD), les données personnelles de l'Utilisateur sont collectées et traitées uniquement pour les finalités suivantes :</p>
             <ul>
-              <li><strong>Principe de Finalité :</strong> Les données ne doivent être collectées et traitées que pour des objectifs déterminés, explicites et légitimes. L'Administrateur s'interdit d'utiliser les données à des fins autres que celles prévues par ses missions.</li>
-              <li><strong>Principe de Minimisation :</strong> Seules les données strictement nécessaires à la poursuite de la finalité du traitement doivent être consultées et traitées. L'Administrateur doit s'abstenir de consulter des dossiers ou des informations non requis pour l'accomplissement de sa tâche en cours.</li>
-              <li><strong>Principe d'Intégrité et de Confidentialité :</strong> L'Administrateur doit prendre toutes les mesures nécessaires pour garantir la sécurité des données, notamment pour empêcher qu'elles soient déformées, endommagées ou que des tiers non autorisés y aient accès.</li>
+              <li>Gestion des demandes de documents administratifs (conventions de stage, attestations, bulletins, etc.)</li>
+              <li>Communication sécurisée entre l'établissement, les étudiants et les parents</li>
+              <li>Archivage et traçabilité des échanges documentaires</li>
             </ul>
+            <p><strong>Attention :</strong> Les données de l'Utilisateur seront utilisées exclusivement dans le cadre de ces finalités. Toute utilisation détournée est strictement interdite et peut entraîner des sanctions.</p>
           </section>
 
           <section>
-            <h2>Article 4 : Règles de Sécurité Stricte</h2>
+            <h2>Article 4 : Droits de l'Utilisateur (RGPD)</h2>
+            <p>L'Utilisateur dispose des droits suivants concernant ses données personnelles :</p>
+            <ul>
+              <li><strong>Droit d'accès :</strong> Consulter ses données personnelles traitées par la Plateforme</li>
+              <li><strong>Droit de rectification :</strong> Demander la correction de données inexactes</li>
+              <li><strong>Droit à l'effacement :</strong> Demander la suppression de ses données dans certains cas</li>
+              <li><strong>Droit à la portabilité :</strong> Recevoir ses données dans un format structuré</li>
+              <li><strong>Droit d'opposition :</strong> S'opposer au traitement de ses données pour des motifs légitimes</li>
+            </ul>
+            <p>Pour exercer ces droits, contactez le Délégué à la Protection des Données (DPO) de l'établissement.</p>
+          </section>
+
+          <section>
+            <h2>Article 5 : Conditions de Sécurité</h2>
             <ol>
-              <li><strong>Gestion des Identifiants :</strong> Les identifiants de connexion sont personnels, uniques et incessibles. L'Administrateur est entièrement responsable de la conservation et de la confidentialité de son mot de passe. Il s'engage à ne jamais le communiquer. En cas de compromission ou de suspicion de compromission, il doit en informer le responsable de la sécurité sans délai.</li>
-              <li><strong>Utilisation d'un Poste de Travail Sécurisé :</strong> L'accès à la Plateforme doit se faire depuis un poste de travail sécurisé, doté d'un antivirus à jour et d'un pare-feu. L'utilisation de réseaux Wi-Fi publics non sécurisés pour accéder à la Plateforme est formellement proscrite.</li>
-              <li><strong>Interdiction d'Exportation Non Autorisée :</strong> Toute exportation, copie sur des supports amovibles (clés USB, disques durs externes) ou envoi par email non sécurisé de données à caractère personnel est interdit, sauf procédure exceptionnelle validée par la hiérarchie.</li>
-              <li><strong>Verrouillage de Session :</strong> L'Administrateur doit systématiquement verrouiller sa session de travail (Ctrl+Alt+Suppr sur Windows, ou équivalent) dès qu'il quitte son poste, même pour une courte durée.</li>
+              <li><strong>Gestion des Identifiants :</strong> Les identifiants de connexion sont personnels et confidentiels. L'Utilisateur est responsable de leur conservation. Ne partagez jamais vos identifiants avec des tiers.</li>
+              <li><strong>Utilisation Sécurisée :</strong> Accédez à la Plateforme uniquement depuis des appareils et réseaux sécurisés. Évitez les réseaux Wi-Fi publics pour les opérations sensibles.</li>
+              <li><strong>Protection des Données :</strong> Ne téléchargez pas de fichiers suspects et signalez immédiatement toute activité inhabituelle.</li>
+              <li><strong>Déconnexion :</strong> Déconnectez-vous systématiquement après utilisation de la Plateforme.</li>
             </ol>
           </section>
 
           <section>
-            <h2>Article 5 : Traçabilité et Audit</h2>
-            <p>Conformément aux exigences de sécurité, toutes les actions réalisées sur la Plateforme font l'objet d'une journalisation (logs de connexion, consultations, modifications, exportations). Ces journaux sont conservés de manière sécurisée et peuvent être audités à tout moment par les services habilités afin de détecter et d'analyser toute activité suspecte ou non conforme.</p>
+            <h2>Article 6 : Responsabilités de l'Utilisateur</h2>
+            <p>L'Utilisateur s'engage à :</p>
+            <ul>
+              <li>Utiliser la Plateforme uniquement pour des fins légitimes liées à la gestion documentaire</li>
+              <li>Ne pas tenter d'accéder à des données qui ne lui sont pas destinées</li>
+              <li>Signaler immédiatement toute faille de sécurité ou tentative d'intrusion</li>
+              <li>Respecter la confidentialité des informations consultées</li>
+            </ul>
           </section>
 
           <section>
-            <h2>Article 6 : Signalement des Violations de Données</h2>
-            <p>L'Administrateur a l'obligation de signaler immédiatement à son supérieur hiérarchique et/ou au Délégué à la Protection des Données (DPO) toute violation de données à caractère personnel ou toute suspicion de violation (perte d'identifiants, accès suspect, etc.), conformément à l'article 33 du RGPD. L'absence de signalement constitue une faute grave.</p>
+            <h2>Article 7 : Sécurité des Données</h2>
+            <p>La Plateforme met en œuvre des mesures techniques et organisationnelles appropriées pour garantir la sécurité des données personnelles, conformément au RGPD. Cela inclut le chiffrement des données, les contrôles d'accès, et la surveillance continue.</p>
           </section>
 
           <section>
-            <h2>Article 7 : Sanctions</h2>
-            <p>Tout manquement délibéré ou par négligence aux règles édictées dans les présentes CGU expose l'Administrateur à des sanctions disciplinaires pouvant aller jusqu'au licenciement pour faute grave, sans préjudice d'éventuelles poursuites judiciaires (civiles ou pénales) engagées à son encontre ou à l'encontre de l'organisation.</p>
+            <h2>Article 8 : Modifications des CGU</h2>
+            <p>Les présentes CGU peuvent être modifiées à tout moment. L'Utilisateur sera informé des changements et devra accepter la nouvelle version pour continuer à utiliser la Plateforme.</p>
           </section>
 
           <section className="terms-acceptance-section">
-            <h2>Article 8 : Acceptation</h2>
-            <p>En accédant à la plateforme, l'Administrateur reconnaît avoir lu, compris et accepté l'ensemble de ces conditions et s'engage à les respecter scrupuleusement dans le cadre de ses fonctions.</p>
+            <h2>Article 9 : Acceptation</h2>
+            <p>En accédant à la Plateforme, l'Utilisateur reconnaît avoir lu, compris et accepté l'ensemble de ces conditions générales d'utilisation orientées étudiants et parents.</p>
           </section>
         </main>
 

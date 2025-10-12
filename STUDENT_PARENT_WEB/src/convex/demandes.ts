@@ -55,6 +55,13 @@ export const updateDemande = mutation({
   },
 });
 
+export const deleteDemande = mutation({
+  args: { id: v.id("demandes") },
+  handler: async (ctx, { id }) => {
+    await ctx.db.delete(id);
+  },
+});
+
 // Mutation to populate mock data
 export const populateMockDemandes = mutation({
   args: {},

@@ -111,10 +111,18 @@ export default defineSchema({
   }),
   actionLogs: defineTable({
     userId: v.id("users"),
+    userEmail: v.string(),
+    userName: v.optional(v.string()),
     action: v.string(),
-    details: v.any(),
+    actionType: v.string(), // "login", "profile_update", "document_request", "document_delete", etc.
+    details: v.optional(v.any()),
+    ipAddress: v.optional(v.string()),
+    userAgent: v.optional(v.string()),
     timestamp: v.number(),
-  }),
+  })
+    .index("by_user", ["userId"])
+    .index("by_timestamp", ["timestamp"])
+    .index("by_action_type", ["actionType"]),
   conventions: defineTable({
     // État civil du candidat
     civiliteCandidat: v.string(),

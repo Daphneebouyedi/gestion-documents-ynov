@@ -6,7 +6,6 @@ import Ynov from '../img/Ynov.png';
 import './Login.css';
 import ReCAPTCHA from 'react-google-recaptcha';
 
-
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -23,7 +22,6 @@ const Login = () => {
   const [showPwHelp, setShowPwHelp] = useState(false);
   const [pwTouched, setPwTouched] = useState(false);
   const [recaptchaValue, setRecaptchaValue] = useState(null);
-
 
   // Initialize Convex login mutation only
   const startLoginWithOtp = useAction(api.authActions.startLoginWithOtp);
@@ -49,17 +47,19 @@ const Login = () => {
       return;
     }
 
-    // Vérification sécurité du mot de passe
-    const pw = formData.password || "";
-    const hasMin = pw.length >= 8;
-    const hasUpper = /[A-Z]/.test(pw);
-    const hasLower = /[a-z]/.test(pw);
-    const hasDigit = /\d/.test(pw);
-    const hasSymbol = /[^A-Za-z0-9]/.test(pw);
-    if (!(hasMin && hasUpper && hasLower && hasDigit && hasSymbol)) {
-      setError("Le mot de passe doit contenir au minimum 8 caractères, une majuscule, une minuscule, un chiffre et un symbole.");
-      setLoading(false);
-      return;
+    // Vérification sécurité du mot de passe (seulement pour admin)
+    if (!window.location.pathname.includes('parents') && !window.location.pathname.includes('students')) {
+      const pw = formData.password || "";
+      const hasMin = pw.length >= 8;
+      const hasUpper = /[A-Z]/.test(pw);
+      const hasLower = /[a-z]/.test(pw);
+      const hasDigit = /\d/.test(pw);
+      const hasSymbol = /[^A-Za-z0-9]/.test(pw);
+      if (!(hasMin && hasUpper && hasLower && hasDigit && hasSymbol)) {
+        setError("Le mot de passe doit contenir au minimum 8 caractères, une majuscule, une minuscule, un chiffre et un symbole.");
+        setLoading(false);
+        return;
+      }
     }
 
     try {
@@ -88,7 +88,7 @@ const Login = () => {
       const { token, userId } = await completeLoginWithOtp({ challenge, code: otpCode });
       localStorage.setItem("jwtToken", token);
       localStorage.setItem("userId", userId);
-      navigate('/dashboard');
+      navigate('/demandes');
     } catch (err) {
       console.error('OTP verification failed:', err);
       setError(err.message || "Échec de la vérification OTP");
@@ -96,6 +96,8 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  const isAdmin = !window.location.pathname.includes('parents') && !window.location.pathname.includes('students');
 
   return (
     <div className="login-container">
@@ -108,7 +110,11 @@ const Login = () => {
         {/* Right Section - Form */}
         <div className="right-section">
           <div className="login-form-container">
-            <h2 className="login-title">Connexion Administrateur</h2> {/* Updated title */}
+            <h2 className="login-title">
+              {window.location.pathname.includes('parents') ? 'Connexion Parents' :
+               window.location.pathname.includes('students') ? 'Connexion Etudiants' :
+               'Connexion Administrateur'}
+            </h2>
             <form className="login-form" onSubmit={step === 'credentials' ? handleSubmit : handleOtpSubmit}>
               {step === 'credentials' && (
               <div className="form-group">
@@ -136,7 +142,7 @@ const Login = () => {
                     placeholder="Mot de passe"
                     value={formData.password}
                     onChange={(e) => { setPwTouched(true); handleInputChange(e); }}
-                    onFocus={() => { setShowPwHelp(true); }}
+                    onFocus={() => { if (isAdmin) setShowPwHelp(true); }}
                     onBlur={() => { setShowPwHelp(false); }}
                     className="form-input"
                     required
@@ -161,22 +167,24 @@ const Login = () => {
                       </svg>
                     )}
                   </button>
-                  <button
-                    type="button"
-                    aria-label="Aide mot de passe"
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => setShowPwHelp((v) => !v)}
-                    style={{ background: "transparent", border: "none", position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", cursor: "pointer" }}
-                    title="Règles de sécurité"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"/>
-                      <path d="M12 16v-4"/>
-                      <path d="M12 8h.01"/>
-                    </svg>
-                  </button>
+                  {isAdmin && (
+                    <button
+                      type="button"
+                      aria-label="Aide mot de passe"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => setShowPwHelp((v) => !v)}
+                      style={{ background: "transparent", border: "none", position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", cursor: "pointer" }}
+                      title="Règles de sécurité"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 16v-4"/>
+                        <path d="M12 8h.01"/>
+                      </svg>
+                    </button>
+                  )}
 
-                  {showPwHelp && (
+                  {isAdmin && showPwHelp && (
                     <div style={{ position: 'absolute', zIndex: 10, top: '110%', right: 0, background: '#fff', border: '1px solid #ddd', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', borderRadius: 6, padding: '10px 12px', width: 260 }}>
                       <div style={{ fontWeight: 600, marginBottom: 6 }}>Règles du mot de passe</div>
                       <ul style={{ margin: 0, paddingLeft: 18 }}>
@@ -189,23 +197,23 @@ const Login = () => {
                     </div>
                   )}
                 </div>
-                </div>
-                {step === 'credentials' && pwTouched && (
+              </div>
+              {isAdmin && step === 'credentials' && pwTouched && (
                 (() => {
-                const pw = formData.password || "";
-                const missing = [];
-                if (pw.length < 8) missing.push('• 8 caractères minimum');
-                if (!/[A-Z]/.test(pw)) missing.push('• Majuscule');
-                if (!/[a-z]/.test(pw)) missing.push('• Minuscule');
-                if (!/\d/.test(pw)) missing.push('• Chiffre');
-                if (!/[^A-Za-z0-9]/.test(pw)) missing.push('• Symbole');
-                return missing.length > 0 ? (
-                <div style={{ fontSize: 12, marginTop: -6, marginBottom: 8, lineHeight: 1.4, color: '#d32f2f' }}>
-                {missing.map((m) => (<div key={m}>{m}</div>))}
-                </div>
-                ) : null;
+                  const pw = formData.password || "";
+                  const missing = [];
+                  if (pw.length < 8) missing.push('• 8 caractères minimum');
+                  if (!/[A-Z]/.test(pw)) missing.push('• Majuscule');
+                  if (!/[a-z]/.test(pw)) missing.push('• Minuscule');
+                  if (!/\d/.test(pw)) missing.push('• Chiffre');
+                  if (!/[^A-Za-z0-9]/.test(pw)) missing.push('• Symbole');
+                  return missing.length > 0 ? (
+                    <div style={{ fontSize: 12, marginTop: -6, marginBottom: 8, lineHeight: 1.4, color: '#d32f2f' }}>
+                      {missing.map((m) => (<div key={m}>{m}</div>))}
+                    </div>
+                  ) : null;
                 })()
-                )}
+              )}
 
               {step === 'otp' && (
                 <div className="form-group">
