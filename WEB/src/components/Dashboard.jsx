@@ -1,7 +1,6 @@
 import React from 'react';
 import DashboardLayout from './DashboardLayout';
 import './Dashboard.css';
-import { BarChart, Bar, PieChart, Pie, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
 import { useQuery } from 'convex/react';
 import { api } from '../convex/_generated/api';
@@ -12,18 +11,6 @@ const Dashboard = () => {
   const totalDocuments = useQuery(api.documents.getTotalDocuments) || 0;
   const totalTransferredDocuments = useQuery(api.documents.getTotalTransferredDocuments) || 0;
   const totalRequests = useQuery(api.requests.getTotalRequests) || 0;
-
-  // Mock Data for Charts
-  const monthlyData = [];
-
-  const documentTypeData = [];
-
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
-  const requestVolumeData = [];
-
-  // Mock Data for Alerts
-  const alertsData = [];
 
   return (
     <DashboardLayout pageTitle="Tableau de bord" pageDescription="Bienvenue sur votre espace d'administration">
@@ -81,62 +68,6 @@ const Dashboard = () => {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Charts Section */}
-        <div className="charts-section">
-          <div className="chart-card">
-            <h3>Documents et Demandes par Mois</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={monthlyData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="documents" fill="#8884d8" name="Documents Ajoutés" />
-                <Bar dataKey="requests" fill="#82ca9d" name="Demandes Traitées" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="chart-card">
-            <h3>Répartition des Documents par Type</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={documentTypeData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                >
-                  {documentTypeData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="chart-card">
-            <h3>Évolution du Volume de Demandes</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={requestVolumeData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="volume" stroke="#ffc658" activeDot={{ r: 8 }} name="Volume de Demandes" />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
         </div>
 
         {/* Historique des actions */}
